@@ -7,6 +7,7 @@ use App\Models\Education;
 use App\Models\Industry;
 use App\Models\SocialMedia;
 use App\Models\Specialization;
+use App\Models\Tool;
 use App\Models\Trainer;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -24,6 +25,7 @@ class TrainerSeeder extends Seeder
             ->has(Certificate::factory(3))
             ->hasAttached(Specialization::factory(3))
             ->hasAttached(Industry::factory(3))
+            ->hasAttached(Tool::factory(3))
             ->create();
     }
 }
