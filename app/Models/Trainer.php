@@ -72,4 +72,9 @@ class Trainer extends Model
     {
         return $this->hasMany(AiSkill::class);
     }
+
+    public function workExperiences(): HasMany
+    {
+        return $this->hasMany(WorkExperience::class);
+    }
 }

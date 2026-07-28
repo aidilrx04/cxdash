@@ -12,6 +12,7 @@ use App\Models\Specialization;
 use App\Models\Tool;
 use App\Models\Trainer;
 use App\Models\TrainingMethod;
+use App\Models\WorkExperience;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -32,6 +33,7 @@ class TrainerSeeder extends Seeder
             ->hasAttached(TrainingMethod::factory(3))
             ->has(Language::factory(3))
             ->has(AiSkill::factory(3))
+            ->has(WorkExperience::factory(3))
             ->create();
     }
 }
