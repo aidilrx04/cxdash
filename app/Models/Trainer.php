@@ -5,6 +5,7 @@ namespace App\Models;
 use Database\Factories\TrainerFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Trainer extends Model
@@ -40,5 +41,10 @@ class Trainer extends Model
     public function certificates(): HasMany
     {
         return $this->hasMany(Certificate::class);
+    }
+
+    public function specializations(): BelongsToMany
+    {
+        return $this->belongsToMany(Specialization::class);
     }
 }

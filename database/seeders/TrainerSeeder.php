@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Certificate;
 use App\Models\Education;
 use App\Models\SocialMedia;
+use App\Models\Specialization;
 use App\Models\Trainer;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -20,6 +21,7 @@ class TrainerSeeder extends Seeder
             ->has(SocialMedia::factory(3))
             ->has(Education::factory(3))
             ->has(Certificate::factory(3))
+            ->hasAttached(Specialization::factory(3))
             ->create();
     }
 }
