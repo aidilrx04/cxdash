@@ -9,6 +9,7 @@ use App\Filament\Resources\Trainers\Pages\ViewTrainer;
 use App\Filament\Resources\Trainers\RelationManagers\CertificatesRelationManager;
 use App\Filament\Resources\Trainers\RelationManagers\EducationRelationManager;
 use App\Filament\Resources\Trainers\RelationManagers\IndustriesRelationManager;
+use App\Filament\Resources\Trainers\RelationManagers\LanguagesRelationManager;
 use App\Filament\Resources\Trainers\RelationManagers\SocialMediaRelationManager;
 use App\Filament\Resources\Trainers\RelationManagers\SpecializationsRelationManager;
 use App\Filament\Resources\Trainers\RelationManagers\ToolsRelationManager;
@@ -57,6 +58,7 @@ class TrainerResource extends Resource
             IndustriesRelationManager::class,
             ToolsRelationManager::class,
             TrainingMethodsRelationManager::class,
+            LanguagesRelationManager::class,
         ];
     }
 
