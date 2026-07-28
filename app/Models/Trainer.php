@@ -36,4 +36,9 @@ class Trainer extends Model
     {
         return $this->hasMany(Education::class);
     }
+
+    public function certificates(): HasMany
+    {
+        return $this->hasMany(Certificate::class);
+    }
 }
