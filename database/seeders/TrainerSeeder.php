@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\AiSkill;
 use App\Models\Certificate;
 use App\Models\Education;
 use App\Models\Industry;
@@ -30,6 +31,7 @@ class TrainerSeeder extends Seeder
             ->hasAttached(Tool::factory(3))
             ->hasAttached(TrainingMethod::factory(3))
             ->has(Language::factory(3))
+            ->has(AiSkill::factory(3))
             ->create();
     }
 }
