@@ -6,6 +6,7 @@ use App\Filament\Resources\Trainers\Pages\CreateTrainer;
 use App\Filament\Resources\Trainers\Pages\EditTrainer;
 use App\Filament\Resources\Trainers\Pages\ListTrainers;
 use App\Filament\Resources\Trainers\Pages\ViewTrainer;
+use App\Filament\Resources\Trainers\RelationManagers\CertificatesRelationManager;
 use App\Filament\Resources\Trainers\RelationManagers\EducationRelationManager;
 use App\Filament\Resources\Trainers\RelationManagers\SocialMediaRelationManager;
 use App\Filament\Resources\Trainers\Schemas\TrainerForm;
@@ -46,6 +47,7 @@ class TrainerResource extends Resource
         return [
             SocialMediaRelationManager::class,
             EducationRelationManager::class,
+            CertificatesRelationManager::class,
         ];
     }
 
