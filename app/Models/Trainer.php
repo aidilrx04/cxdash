@@ -57,4 +57,9 @@ class Trainer extends Model
     {
         return $this->belongsToMany(Tool::class);
     }
+
+    public function trainingMethods(): BelongsToMany
+    {
+        return $this->belongsToMany(TrainingMethod::class);
+    }
 }
