@@ -6,6 +6,7 @@ use App\Filament\Resources\Trainers\Pages\CreateTrainer;
 use App\Filament\Resources\Trainers\Pages\EditTrainer;
 use App\Filament\Resources\Trainers\Pages\ListTrainers;
 use App\Filament\Resources\Trainers\Pages\ViewTrainer;
+use App\Filament\Resources\Trainers\RelationManagers\AiSkillsRelationManager;
 use App\Filament\Resources\Trainers\RelationManagers\CertificatesRelationManager;
 use App\Filament\Resources\Trainers\RelationManagers\EducationRelationManager;
 use App\Filament\Resources\Trainers\RelationManagers\IndustriesRelationManager;
@@ -59,6 +60,7 @@ class TrainerResource extends Resource
             ToolsRelationManager::class,
             TrainingMethodsRelationManager::class,
             LanguagesRelationManager::class,
+            AiSkillsRelationManager::class,
         ];
     }
 
