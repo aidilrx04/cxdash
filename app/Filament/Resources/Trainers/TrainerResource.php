@@ -14,6 +14,7 @@ use App\Filament\Resources\Trainers\RelationManagers\LanguagesRelationManager;
 use App\Filament\Resources\Trainers\RelationManagers\SocialMediaRelationManager;
 use App\Filament\Resources\Trainers\RelationManagers\SpecializationsRelationManager;
 use App\Filament\Resources\Trainers\RelationManagers\ToolsRelationManager;
+use App\Filament\Resources\Trainers\RelationManagers\TrainingExperiencesRelationManager;
 use App\Filament\Resources\Trainers\RelationManagers\TrainingMethodsRelationManager;
 use App\Filament\Resources\Trainers\RelationManagers\WorkExperiencesRelationManager;
 use App\Filament\Resources\Trainers\Schemas\TrainerForm;
@@ -63,6 +64,7 @@ class TrainerResource extends Resource
             LanguagesRelationManager::class,
             AiSkillsRelationManager::class,
             WorkExperiencesRelationManager::class,
+            TrainingExperiencesRelationManager::class,
         ];
     }
 

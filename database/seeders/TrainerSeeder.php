@@ -11,6 +11,7 @@ use App\Models\SocialMedia;
 use App\Models\Specialization;
 use App\Models\Tool;
 use App\Models\Trainer;
+use App\Models\TrainingExperience;
 use App\Models\TrainingMethod;
 use App\Models\WorkExperience;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -34,6 +35,7 @@ class TrainerSeeder extends Seeder
             ->has(Language::factory(3))
             ->has(AiSkill::factory(3))
             ->has(WorkExperience::factory(3))
+            ->has(TrainingExperience::factory(3))
             ->create();
     }
 }

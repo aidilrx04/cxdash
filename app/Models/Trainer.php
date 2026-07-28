@@ -77,4 +77,9 @@ class Trainer extends Model
     {
         return $this->hasMany(WorkExperience::class);
     }
+
+    public function trainingExperiences(): HasMany
+    {
+        return $this->hasMany(TrainingExperience::class);
+    }
 }
