@@ -47,4 +47,9 @@ class Trainer extends Model
     {
         return $this->belongsToMany(Specialization::class);
     }
+
+    public function industries(): BelongsToMany
+    {
+        return $this->belongsToMany(Industry::class);
+    }
 }

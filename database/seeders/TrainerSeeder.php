@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Certificate;
 use App\Models\Education;
+use App\Models\Industry;
 use App\Models\SocialMedia;
 use App\Models\Specialization;
 use App\Models\Trainer;
@@ -22,6 +23,7 @@ class TrainerSeeder extends Seeder
             ->has(Education::factory(3))
             ->has(Certificate::factory(3))
             ->hasAttached(Specialization::factory(3))
+            ->hasAttached(Industry::factory(3))
             ->create();
     }
 }
