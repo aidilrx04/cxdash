@@ -6,6 +6,7 @@ use App\Filament\Resources\Trainers\Pages\CreateTrainer;
 use App\Filament\Resources\Trainers\Pages\EditTrainer;
 use App\Filament\Resources\Trainers\Pages\ListTrainers;
 use App\Filament\Resources\Trainers\Pages\ViewTrainer;
+use App\Filament\Resources\Trainers\RelationManagers\EducationRelationManager;
 use App\Filament\Resources\Trainers\RelationManagers\SocialMediaRelationManager;
 use App\Filament\Resources\Trainers\Schemas\TrainerForm;
 use App\Filament\Resources\Trainers\Schemas\TrainerInfolist;
@@ -43,7 +44,8 @@ class TrainerResource extends Resource
     public static function getRelations(): array
     {
         return [
-            SocialMediaRelationManager::class
+            SocialMediaRelationManager::class,
+            EducationRelationManager::class,
         ];
     }
 
