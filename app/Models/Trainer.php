@@ -62,4 +62,9 @@ class Trainer extends Model
     {
         return $this->belongsToMany(TrainingMethod::class);
     }
+
+    public function languages(): HasMany
+    {
+        return $this->hasMany(Language::class);
+    }
 }
