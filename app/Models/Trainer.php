@@ -31,4 +31,9 @@ class Trainer extends Model
     {
         return $this->hasMany(SocialMedia::class);
     }
+
+    public function education(): HasMany
+    {
+        return $this->hasMany(Education::class);
+    }
 }
