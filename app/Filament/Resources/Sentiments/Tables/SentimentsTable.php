@@ -1,30 +1,29 @@
 <?php
 
-namespace App\Filament\Resources\TrainingReports\Tables;
+namespace App\Filament\Resources\Sentiments\Tables;
 
-use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Actions\ViewAction;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\TextInputColumn;
 use Filament\Tables\Table;
 
-class TrainingReportsTable
+class SentimentsTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('name'),
-                TextColumn::make('file_path'),
+                TextColumn::make('trainingReport.name'),
+                TextColumn::make('feedbackQuestion.question'),
+                TextInputColumn::make('sentiment'),
+                TextColumn::make('theme'),
             ])
             ->filters([
                 //
             ])
             ->recordActions([
-                ViewAction::make(),
                 EditAction::make(),
             ])
             ->toolbarActions([

@@ -6,6 +6,7 @@ use App\Filament\Resources\TrainingReports\Pages\CreateTrainingReport;
 use App\Filament\Resources\TrainingReports\Pages\EditTrainingReport;
 use App\Filament\Resources\TrainingReports\Pages\ListTrainingReports;
 use App\Filament\Resources\TrainingReports\Pages\ViewTrainingReport;
+use App\Filament\Resources\TrainingReports\RelationManagers\SentimentsRelationManager;
 use App\Filament\Resources\TrainingReports\Schemas\TrainingReportForm;
 use App\Filament\Resources\TrainingReports\Schemas\TrainingReportInfolist;
 use App\Filament\Resources\TrainingReports\Tables\TrainingReportsTable;
@@ -42,7 +43,7 @@ class TrainingReportResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            SentimentsRelationManager::class,
         ];
     }
 
