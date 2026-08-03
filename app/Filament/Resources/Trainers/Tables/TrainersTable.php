@@ -48,6 +48,8 @@ class TrainersTable
                         TextConstraint::Make('professional_summary'),
                         TextConstraint::Make('additional_info'),
                         TextConstraint::Make('cv_path'),
+                        TextConstraint::make('socialMedia.platform'),
+                        TextConstraint::make('socialMedia.url'),
                     ]),
             ], FiltersLayout::AboveContentCollapsible)
             ->recordActions([
