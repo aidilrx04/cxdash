@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\TrainingReports\RelationManagers;
 
+use App\Jobs\GenerateSentiments;
 use Filament\Actions\Action;
 use Filament\Actions\AssociateAction;
 use Filament\Actions\BulkActionGroup;
@@ -15,6 +16,7 @@ use Filament\Actions\ViewAction;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Notifications\Notification;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -99,8 +101,17 @@ class SentimentsRelationManager extends RelationManager
                     ->modalDescription('Are you sure you want to generate sentiment analysis for all responses in this report?')
                     ->action(function (RelationManager $livewire) {
                         $trainingReport = $livewire->getOwnerRecord();
-                        $job_uuid = Str::uuid();
-                        
+                        $jobUuid = (string) Str::uuid();
+
+                        // 1. Dispatch the job
+                        GenerateSentiments::dispatch($trainingReport, $jobUuid);
+
+                        // 2. Notify the user that processing has started
+                        Notification::make()
+                            ->title('Sentiment generation started')
+                            ->body('The sentiment analysis process has been queued and is running in the background.')
+                            ->info()
+                            ->send();
                     }),
                 AssociateAction::make(),
             ])
