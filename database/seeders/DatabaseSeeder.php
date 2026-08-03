@@ -25,7 +25,8 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call([
-            TrainerSeeder::class
+            TrainerSeeder::class,
+            TrainingReportSeeder::class,
         ]);
     }
 }
