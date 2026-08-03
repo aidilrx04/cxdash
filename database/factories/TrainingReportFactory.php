@@ -18,8 +18,16 @@ class TrainingReportFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->company() . '.' . fake()->fileExtension(),
-            'file_path' => fake()->filePath()
+            'file_name' => fake()->company() . '.' . fake()->fileExtension(),
+            'program_title' => fake()->name(),
+            'client_name' => fake()->company(),
+            'trainer_name' => fake()->name(),
+            'total_participants' => fake()->numberBetween(10, 100),
+            'total_evaluation' => fake()->numberBetween(10, 100),
+            'overall_satisfaction' => fake()->numberBetween(10, 100) . '%',
+            'status' => fake()->colorName(),
+            'pss_score' => fake()->numberBetween(10, 100),
+            'file_path' => fake()->filePath(),
         ];
     }
 }

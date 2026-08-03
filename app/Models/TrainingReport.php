@@ -12,8 +12,16 @@ class TrainingReport extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'file_path'
+        'file_name',
+        'program_title',
+        'client_name',
+        'trainer_name',
+        'total_participants',
+        'total_evaluation',
+        'overall_satisfaction',
+        'status',
+        'pss_score',
+        'file_path',
     ];
 
     public function trainees(): HasMany
