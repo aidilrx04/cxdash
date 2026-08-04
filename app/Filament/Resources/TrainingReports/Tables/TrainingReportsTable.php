@@ -17,7 +17,17 @@ class TrainingReportsTable
     {
         return $table
             ->columns([
-                TextColumn::make('name'),
+                TextColumn::make('file_name')
+                    ->toggleable()
+                    ->toggledHiddenByDefault(),
+                TextColumn::make('program_title'),
+                TextColumn::make('client_name'),
+                TextColumn::make('trainer_name'),
+                TextColumn::make('total_participants'),
+                TextColumn::make('total_evaluation'),
+                TextColumn::make('overall_satisfaction'),
+                TextColumn::make('status'),
+                TextColumn::make('pss_score'),
                 TextColumn::make('file_path'),
             ])
             ->filters([
