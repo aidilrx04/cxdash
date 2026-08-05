@@ -18,7 +18,7 @@ class FeedbackGeneralFactory extends Factory
     public function definition(): array
     {
         return [
-            'respond' => fake()->sentence(),
+            'response' => fake()->sentence(),
             'sentiment' => fake()->randomElement(['positive', 'neutral', 'negative']),
             'theme' => fake()->words(3, true),
         ];

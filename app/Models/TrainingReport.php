@@ -38,4 +38,10 @@ class TrainingReport extends Model
     {
         return $this->hasMany(Sentiment::class);
     }
+
+    // Trainee model act as proxies for filament relation manager to show feedbacks
+    public function feedbackGenerals()
+    {
+        return $this->hasMany(Trainee::class);
+    }
 }

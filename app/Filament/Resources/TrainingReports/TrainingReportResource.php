@@ -6,6 +6,7 @@ use App\Filament\Resources\TrainingReports\Pages\CreateTrainingReport;
 use App\Filament\Resources\TrainingReports\Pages\EditTrainingReport;
 use App\Filament\Resources\TrainingReports\Pages\ListTrainingReports;
 use App\Filament\Resources\TrainingReports\Pages\ViewTrainingReport;
+use App\Filament\Resources\TrainingReports\RelationManagers\FeedbackGeneralsRelationManager;
 use App\Filament\Resources\TrainingReports\RelationManagers\SentimentsRelationManager;
 use App\Filament\Resources\TrainingReports\RelationManagers\TraineesRelationManager;
 use App\Filament\Resources\TrainingReports\Schemas\TrainingReportForm;
@@ -46,6 +47,7 @@ class TrainingReportResource extends Resource
         return [
             TraineesRelationManager::class,
             SentimentsRelationManager::class,
+            FeedbackGeneralsRelationManager::class,
         ];
     }
 

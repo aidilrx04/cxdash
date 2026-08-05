@@ -18,7 +18,7 @@ return new class extends Migration
 
             $table->foreignIdFor(Trainee::class);
             $table->foreignIdFor(FeedbackQuestion::class);
-            $table->string('respond');
+            $table->string('response');
             $table->string('sentiment')->nullable();
             $table->string('theme')->nullable();
 

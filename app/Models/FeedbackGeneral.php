@@ -14,7 +14,7 @@ class FeedbackGeneral extends Model
     protected $fillable = [
         'trainee_id',
         'feedback_question_id',
-        'respond',
+        'response',
         'sentiment',
         'theme'
     ];
