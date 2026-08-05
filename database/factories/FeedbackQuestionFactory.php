@@ -19,6 +19,7 @@ class FeedbackQuestionFactory extends Factory
     {
         return [
             'question' => fake()->sentence(10),
+            'type' => fake()->randomElement(['open', 'likert'])
         ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\FeedbackGeneral;
 use App\Models\FeedbackQuestion;
 use App\Models\Sentiment;
 use App\Models\Trainee;
@@ -16,15 +17,16 @@ class TrainingReportSeeder extends Seeder
      */
     public function run(): void
     {
+        $questions = FeedbackQuestion::factory(4)->create();
         $reports = TrainingReport::factory(10)
             ->has(Trainee::factory(10))
-            ->has(FeedbackQuestion::factory(4))
             ->create();
 
         foreach ($reports as $report) {
             foreach ($report->trainees as $trainee) {
-                foreach ($report->feedbackQuestions as $question) {
+                foreach ($questions as $question) {
                     Sentiment::factory()->for($report)->for($trainee)->for($question)->create();
+                    FeedbackGeneral::factory()->for($trainee)->for($question)->create();
                 }
             }
         }

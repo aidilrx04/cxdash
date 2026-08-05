@@ -15,8 +15,9 @@ return new class extends Migration
         Schema::create('feedback_questions', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignIdFor(TrainingReport::class);
+            // $table->foreignIdFor(TrainingReport::class);
             $table->text('question');
+            $table->enum('type', ['open', 'likert']);
 
             $table->timestamps();
         });
