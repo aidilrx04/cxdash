@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\TrainingReports\RelationManagers;
 
+use App\Jobs\GenerateSentiments;
+use Filament\Actions\Action;
 use Filament\Actions\AssociateAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
@@ -11,8 +13,10 @@ use Filament\Actions\DissociateAction;
 use Filament\Actions\DissociateBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
@@ -72,6 +76,17 @@ class FeedbackGeneralsRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
+                Action::make('generate_sentiment')
+                    ->label('Generate Sentiment Analysis')
+                    ->icon(Heroicon::Sparkles)
+                    ->action(function (RelationManager $livewire) {
+                        $record = $this->getOwnerRecord();
+                        GenerateSentiments::dispatch($record, Str::uuid());
+                        Notification::make()->title('Sentiment analysis queued')
+                            ->body('This will take a moment')
+                            ->info()
+                            ->send();
+                    }),
                 CreateAction::make(),
                 AssociateAction::make(),
             ])
