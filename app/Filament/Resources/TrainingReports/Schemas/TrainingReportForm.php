@@ -4,6 +4,7 @@ namespace App\Filament\Resources\TrainingReports\Schemas;
 
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
@@ -50,16 +51,18 @@ class TrainingReportForm
                                 $originalName = basename($file);
                             }
 
+                            Storage::disk('local')->makeDirectory('parsed');
+
                             // Path to Python executable in venv & script
                             $venvPython = base_path('lib/pdfparser/venv/Scripts/python.exe'); // Use 'venv/Scripts/python.exe' on Windows
                             $scriptPath = base_path('lib/pdfparser/report_information.py');
 
                             // Run Python Process
-                            $process = new Process([$venvPython, $scriptPath, $absoluteFilePath]);
+                            $process = new Process([$venvPython, $scriptPath, $absoluteFilePath, Storage::disk('local')->path("parsed/" . basename($absoluteFilePath) . ".json")]);
                             $process->run();
 
                             if ($process->isSuccessful()) {
-                                $extractedData = json_decode($process->getOutput(), true);
+                                $extractedData = json_decode(file_get_contents(Storage::disk('local')->path("parsed/" . basename($absoluteFilePath) . ".json")), true);
 
                                 if (is_array($extractedData)) {
                                     // Populate step 2 fields
@@ -72,6 +75,7 @@ class TrainingReportForm
                                     $set('overall_satisfaction', $extractedData['overall_satisfaction'] ?? null);
                                     $set('status', $extractedData['status'] ?? null);
                                     $set('pss_score', $extractedData['pss_score'] ?? null);
+                                    $set('parsed_path', "parsed/" . basename($absoluteFilePath) . ".json");
                                 }
                             } else {
                                 logger()->error('PDF Parsing failed: ' . $process->getErrorOutput());
@@ -98,6 +102,7 @@ class TrainingReportForm
                             TextInput::make('overall_satisfaction'),
                             TextInput::make('status'),
                             TextInput::make('pss_score'),
+                            Hidden::make('parsed_path')
                         ]),
                 ])->submitAction(new HtmlString(Blade::render(<<<BLADE
     <x-filament::button
