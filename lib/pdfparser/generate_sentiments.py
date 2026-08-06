@@ -1,12 +1,12 @@
 import os
 import re
 import sys
-import pandas as pd
-import pdfplumber
 import openpyxl
-from openpyxl.worksheet.datavalidation import DataValidation
+import pdfplumber
+import pandas as pd
 from openpyxl.formatting.rule import CellIsRule
-from openpyxl.styles import PatternFill, Font
+from openpyxl.styles import Font, PatternFill
+from openpyxl.worksheet.datavalidation import DataValidation
 from transformers import pipeline
 
 # ==========================================
@@ -42,21 +42,22 @@ TIMESTAMP_PATTERN = re.compile(
 )
 ILLEGAL_CHARACTERS_RE = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f]")
 
-# Load zero-shot classification pipeline
-print("Loading AI model for sentiment and theme detection...")
-classifier = pipeline(
+# ==========================================
+# LOAD AI MODELS
+# ==========================================
+print("Loading AI models for sentiment analysis and dynamic theme extraction...")
+
+# 1. Zero-shot classifier for sentiment (Positive, Neutral, Negative)
+sentiment_classifier = pipeline(
     "zero-shot-classification", model="facebook/bart-large-mnli"
 )
-
 SENTIMENT_LABELS = ["positive", "neutral", "negative"]
-THEME_LABELS = [
-    "satisfied",
-    "unsatisfied",
-    "unclear / vague",
-    "suggestion / improvement",
-    "request for new topic",
-    "praise / appreciation",
-]
+
+# 2. Generative text-to-text model for open-ended, question-aware theme extraction
+# Note: Swap to "google/flan-t5-base" if you require slightly richer themes on a modern CPU
+theme_generator = pipeline(
+    "text2text-generation", model="google/flan-t5-small"
+)
 
 
 def clean_cell(cell):
@@ -69,27 +70,29 @@ def clean_cell(cell):
     return text
 
 
-def analyze_text(text):
-    """Detect sentiment and theme for a single text response."""
+def analyze_text(text, header=""):
+    """Detect sentiment using zero-shot classification and generate a dynamic theme using FLAN-T5."""
     if not text or len(text.strip()) < 2:
         return "", ""
 
-    # Combine sentiment and theme labels into one pass to reduce processing time
-    all_labels = SENTIMENT_LABELS + THEME_LABELS
-    res = classifier(text, candidate_labels=all_labels, multi_label=True)
+    # 1. Sentiment classification
+    sentiment_res = sentiment_classifier(
+        text, candidate_labels=SENTIMENT_LABELS, multi_label=False
+    )
+    top_sentiment = sentiment_res["labels"][0]
 
-    top_sentiment = ""
-    top_theme = ""
+    # 2. Open-ended dynamic theme extraction with Question Context
+    if header:
+        prompt = (
+            f"Question: {header}\n"
+            f"Answer: {text}\n"
+            f"Summarize the main topic or feedback of the answer in 2 to 4 words:"
+        )
+    else:
+        prompt = f"Summarize the main topic of this feedback in 2 to 4 words: {text}"
 
-    # Extract top matching label for each category
-    for label in res["labels"]:
-        if not top_sentiment and label in SENTIMENT_LABELS:
-            top_sentiment = label
-        elif not top_theme and label in THEME_LABELS:
-            top_theme = label
-
-        if top_sentiment and top_theme:
-            break
+    theme_res = theme_generator(prompt, max_new_tokens=12, do_sample=False)
+    top_theme = theme_res[0]["generated_text"].strip().strip(".")
 
     return top_sentiment, top_theme
 
@@ -106,7 +109,7 @@ def identify_header(row):
 
 
 # ==========================================
-# STEP 1: EXTRACT & MERGE DATA
+# STEP 1: EXTRACT & MERGE DATA FROM PDF
 # ==========================================
 merged_people = {}
 current_active_header = None
@@ -171,7 +174,7 @@ for header in TARGET_HEADERS:
     )
 
 rows_data = []
-print("Running sentiment and theme classification...")
+print("Running sentiment analysis and dynamic theme extraction...")
 
 for idx, (name, responses) in enumerate(merged_people.items(), start=1):
     person_row = {"No": idx, "Name": name}
@@ -180,11 +183,12 @@ for idx, (name, responses) in enumerate(merged_people.items(), start=1):
         response_text = responses.get(header, "")
         person_row[header] = response_text
 
-        sentiment, theme = analyze_text(response_text)
+        # Pass both response text and question header into analyze_text
+        sentiment, theme = analyze_text(response_text, header=header)
 
         person_row[f"sentiment_{header}"] = sentiment
         person_row[f"theme_{header}"] = theme
-        person_row[f"correctness_{header}"] = ""  # Left blank for dropdown
+        person_row[f"correctness_{header}"] = ""  # Left blank for manual review
 
     rows_data.append(person_row)
 
