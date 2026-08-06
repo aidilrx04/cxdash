@@ -3,8 +3,10 @@
 namespace App\Filament\Resources\TrainingReports\Pages;
 
 use App\Filament\Resources\TrainingReports\TrainingReportResource;
+use App\Filament\Resources\TrainingReports\Widgets\TrainingReportStats;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
+use Override;
 
 class ListTrainingReports extends ListRecords
 {
@@ -14,6 +16,14 @@ class ListTrainingReports extends ListRecords
     {
         return [
             CreateAction::make(),
+        ];
+    }
+
+    #[Override]
+    public function getHeaderWidgets(): array
+    {
+        return [
+            TrainingReportStats::class
         ];
     }
 }
