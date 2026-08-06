@@ -11,6 +11,7 @@ use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Symfony\Component\Process\Process;
 
 class CreateTrainingReport extends CreateRecord
 {
@@ -18,8 +19,42 @@ class CreateTrainingReport extends CreateRecord
 
     protected function afterCreate()
     {
+        $record = $this->record;
+        $reportFilePath = Storage::disk('local')->path($record->file_path);
+
+        Storage::disk('local')->makeDirectory('parsed');
+
+        // Path to Python executable in venv & script
+        $venvPython = base_path('lib/pdfparser/venv/Scripts/python.exe'); // Use 'venv/Scripts/python.exe' on Windows
+        $scriptPath = base_path('lib/pdfparser/report_information.py');
+
+        // Run Python Process
+        $process = new Process([$venvPython, $scriptPath, $reportFilePath, Storage::disk('local')->path("parsed/" . basename($record->file_path) . ".json")]);
+        $process->run();
+
+        if ($process->isSuccessful()) {
+            $extractedData = json_decode(file_get_contents(Storage::disk('local')->path("parsed/" . basename($record->file_path) . ".json")), true);
+
+            if (is_array($extractedData)) {
+                // Populate step 2 fields
+                $record->update([
+                    'file_name' => basename($record->file_path),
+                    'program_title' => $extractedData['program_title'] ?? null,
+                    'client_name' => $extractedData['client_name'] ?? null,
+                    'trainer_name' => $extractedData['trainer_name'] ?? null,
+                    'total_participants' => $extractedData['total_participant'] ?? null,
+                    'total_evaluation' => $extractedData['total_evaluation'] ?? null,
+                    'overall_satisfaction' => $extractedData['overall_satisfaction'] ?? null,
+                    'status' => $extractedData['status'] ?? null,
+                    'pss_score' => $extractedData['pss_score'] ?? null,
+                ]);
+            }
+        } else {
+            logger()->error('PDF Parsing failed: ' . $process->getErrorOutput());
+        }
+
         DB::beginTransaction();
-        $parsed_file = Storage::disk('local')->path($this->form->getRawState()['parsed_path']);
+        $parsed_file = Storage::disk('local')->path("parsed/" . basename($record->file_path) . ".json");
         $report_information = json_decode(file_get_contents($parsed_file), true);
 
         // participants

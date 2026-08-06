@@ -14,16 +14,16 @@ return new class extends Migration
         Schema::create('training_reports', function (Blueprint $table) {
             $table->id();
 
-            $table->text('file_name');
-            $table->string('program_title');
-            $table->string('client_name');
-            $table->string('trainer_name');
-            $table->string('total_participants');
-            $table->string('total_evaluation');
-            $table->string('overall_satisfaction');
-            $table->string('status');
-            $table->string('pss_score');
             $table->string('file_path');
+            $table->text('file_name')->nullable();
+            $table->string('program_title')->nullable();
+            $table->string('client_name')->nullable();
+            $table->string('trainer_name')->nullable();
+            $table->string('total_participants')->nullable();
+            $table->string('total_evaluation')->nullable();
+            $table->string('overall_satisfaction')->nullable();
+            $table->string('status')->nullable();
+            $table->string('pss_score')->nullable();
 
             $table->timestamps();
         });
