@@ -46,7 +46,7 @@ class TrainingReportResource extends Resource
     {
         return [
             TraineesRelationManager::class,
-            SentimentsRelationManager::class,
+            // SentimentsRelationManager::class,
             FeedbackGeneralsRelationManager::class,
         ];
     }
