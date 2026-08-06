@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Filament\Widgets\DashboardStatsOverview;
+use App\Filament\Widgets\TopClientPssScore;
 use Filament\Pages\Dashboard as BaseDashboard;
 use Override;
 
@@ -14,6 +15,7 @@ class Dashboard extends BaseDashboard
 		// return parent::getWidgets();
 		return [
 			DashboardStatsOverview::class,
+			TopClientPssScore::class
 		];
 	}
 }
