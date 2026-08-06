@@ -19,6 +19,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Colors\Color;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 
@@ -46,8 +47,6 @@ class FeedbackGeneralsRelationManager extends RelationManager
             TextColumn::make('name')
         ];
 
-
-        $feedbackGenerals = $this->getOwnerRecord()->feedbackGenerals->first()->feedbackGenerals;
         foreach ($questions as $question) {
             $schema[] = TextColumn::make('feedback_question' . Str::uuid())
                 ->label($question->question)
@@ -55,7 +54,9 @@ class FeedbackGeneralsRelationManager extends RelationManager
                     // dd($record->feedbackGenerals()->where('feedback_question_id', $question->id)->first());
                     $responseCount = $record->feedbackGenerals()->count() > 0;
                     return $responseCount ? ($record->feedbackGenerals()->where('feedback_question_id', $question->id)->first()->response ?? '') : 'No Response';
-                });
+                })
+                // ->extraAttributes(['style' => 'max-width:300px; word-wrap:wrap'])
+                ->wrap();
             $schema[] = TextColumn::make('feedback_sentiment' . Str::uuid())
                 ->label('Sentiment')
                 ->getStateUsing(function ($record) use ($question) {
@@ -78,7 +79,13 @@ class FeedbackGeneralsRelationManager extends RelationManager
                 $schema
             )
             ->filters([
-                //
+                // SelectFilter::make('sentiment')
+                //     ->options([
+                //         'positive' => 'positive',
+                //         'neutral' => 'neutral',
+                //         'negative' => 'negative',
+                //     ])
+                //     ->native(false)
             ])
             ->headerActions([
                 Action::make('generate_sentiment')
