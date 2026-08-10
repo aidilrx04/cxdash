@@ -69,7 +69,8 @@ class TrainingReportsTable
                     ->color('info')
                     ->placeholder('N/A')
                     ->alignCenter()
-                    ->toggleable(),
+                    ->toggleable()
+                    ->numeric(2),
 
                 TextColumn::make('status')
                     ->label('Status')
