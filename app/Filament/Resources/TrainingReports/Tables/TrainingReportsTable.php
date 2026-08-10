@@ -3,13 +3,11 @@
 namespace App\Filament\Resources\TrainingReports\Tables;
 
 use App\Models\TrainingReport;
-use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\DatePicker;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\Filter;
@@ -17,6 +15,7 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class TrainingReportsTable
 {
@@ -24,99 +23,136 @@ class TrainingReportsTable
     {
         return $table
             ->defaultSort('created_at', 'desc')
+            ->striped()
             ->columns([
-                TextColumn::make('file_name')
-                    ->sortable()
-                    ->toggleable()
-                    ->toggledHiddenByDefault(),
                 TextColumn::make('program_title')
-                    ->toggleable()
+                    ->label('Program / Client')
                     ->sortable()
-                    ->searchable(),
-                TextColumn::make('client_name')
-                    ->toggleable()
-                    ->sortable()
-                    ->searchable(),
+                    ->searchable()
+                    ->weight('bold')
+                    ->description(fn(TrainingReport $record): string => $record->client_name ?? 'N/A')
+                    ->wrap(),
+
                 TextColumn::make('trainer_name')
-                    ->toggleable()
+                    ->label('Trainer')
                     ->sortable()
-                    ->searchable(),
+                    ->searchable()
+                    ->icon('heroicon-m-user-circle'),
+
                 TextColumn::make('total_participants')
-                    ->toggleable()
-                    ->sortable(),
-                TextColumn::make('total_evaluation')
-                    ->toggleable()
-                    ->sortable(),
+                    ->label('Participants')
+                    ->sortable()
+                    ->numeric()
+                    ->alignCenter()
+                    ->description(fn(TrainingReport $record): string => "{$record->total_evaluation} evaluated"),
+
                 TextColumn::make('overall_satisfaction')
-                    ->toggleable()
+                    ->label('Satisfaction')
                     ->sortable()
-                    ->color(fn($state) => (float)substr($state, 0, -1) >= 80 ? 'success' : ((float)substr($state, 0, -1) >= 60 ? 'warning' : 'danger')),
-                TextColumn::make('status')
-                    ->toggleable()
-                    ->sortable()
-                    ->searchable(),
+                    ->badge()
+                    ->color(function ($state): string {
+                        $val = (float) str_replace('%', '', (string) $state);
+
+                        return match (true) {
+                            $val >= 80 => 'success',
+                            $val >= 60 => 'warning',
+                            $val > 0 => 'danger',
+                            default => 'gray',
+                        };
+                    })
+                    ->alignCenter(),
+
                 TextColumn::make('pss_score')
-                    ->toggleable()
-                    ->sortable(),
+                    ->label('PSS Score')
+                    ->sortable()
+                    ->badge()
+                    ->color('info')
+                    ->placeholder('N/A')
+                    ->alignCenter()
+                    ->toggleable(),
+
+                TextColumn::make('status')
+                    ->label('Status')
+                    ->sortable()
+                    ->searchable()
+                    ->badge()
+                    ->color(fn(?string $state): string => match (strtolower((string) $state)) {
+                        'completed', 'approved', 'final' => 'success',
+                        'pending', 'in progress', 'draft' => 'warning',
+                        'rejected', 'cancelled' => 'danger',
+                        default => 'gray',
+                    })
+                    ->alignCenter(),
+
                 TextColumn::make('file_path')
-                    ->toggleable()
-                    ->hidden(),
+                    ->label('Report File')
+                    ->formatStateUsing(fn($state) => $state ? 'Download' : 'No File')
+                    ->icon(fn($state) => $state ? 'heroicon-m-document-arrow-down' : 'heroicon-m-x-circle')
+                    ->color(fn($state) => $state ? 'primary' : 'gray')
+                    ->url(fn(TrainingReport $record) => $record->file_path ? Storage::disk('public')->path($record->file_path) : null, shouldOpenInNewTab: true)
+                    ->badge()
+                    ->toggleable(),
+
                 TextColumn::make('created_at')
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
-                    ->date(),
+                    ->label('Created Date')
+                    ->sortable()
+                    ->date('d M Y')
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Filter::make('date')
                     ->schema([
                         DatePicker::make('date_start')
+                            ->label('From Date')
                             ->native(false),
                         DatePicker::make('date_end')
-                            ->native(false)
+                            ->label('To Date')
+                            ->native(false),
                     ])
-                    ->query(function (Builder $query, array $data) {
+                    ->query(function (Builder $query, array $data): Builder {
                         return $query
-                            ->when($data['date_start'], fn(Builder $q) => $q->where('created_at', '>=', $data['date_start']))
-                            ->when($data['date_end'], fn(Builder $q) => $q->where('created_at', '<=', $data['date_end']));
+                            ->when($data['date_start'], fn(Builder $q) => $q->whereDate('created_at', '>=', $data['date_start']))
+                            ->when($data['date_end'], fn(Builder $q) => $q->whereDate('created_at', '<=', $data['date_end']));
                     })
-                    ->indicateUsing(function (array $data) {
-                        $date_start = $data['date_start'];
-                        $date_end = $data['date_end'];
-                        if ($date_start) {
-                            $date_start = Carbon::create($date_start)->format('Y-m-d');
+                    ->indicateUsing(function (array $data): ?string {
+                        if ($data['date_start'] && $data['date_end']) {
+                            return 'Date: ' . Carbon::parse($data['date_start'])->format('d M Y') . ' to ' . Carbon::parse($data['date_end'])->format('d M Y');
                         }
-                        if ($date_end) {
-                            $date_end = Carbon::create($date_end)->format('Y-m-d');
+                        if ($data['date_start']) {
+                            return 'Date From: ' . Carbon::parse($data['date_start'])->format('d M Y');
                         }
-                        if ($date_start && $date_end) {
-                            return "Date: {$date_start} to {$date_end}";
+                        if ($data['date_end']) {
+                            return 'Date To: ' . Carbon::parse($data['date_end'])->format('d M Y');
                         }
-                        if ($date_start) {
-                            return "Date Start: {$date_start}";
-                        }
-                        if ($date_end) {
-                            return "Date End: {$date_end}";
-                        }
+
+                        return null;
                     }),
+
                 SelectFilter::make('trainer_name')
-                    ->options(fn() => TrainingReport::select('trainer_name')->distinct()->pluck('trainer_name'))
+                    ->label('Filter by Trainer')
+                    ->options(fn() => TrainingReport::query()->whereNotNull('trainer_name')->pluck('trainer_name', 'trainer_name'))
                     ->multiple()
                     ->preload()
                     ->searchable(),
+
                 SelectFilter::make('client_name')
-                    ->options(fn() => TrainingReport::select('client_name')->distinct()->pluck('client_name', 'client_name'))
+                    ->label('Filter by Client')
+                    ->options(fn() => TrainingReport::query()->whereNotNull('client_name')->pluck('client_name', 'client_name'))
                     ->multiple()
                     ->preload()
                     ->searchable(),
             ], FiltersLayout::AboveContentCollapsible)
             ->recordActions([
-                ViewAction::make(),
-                EditAction::make(),
+                ViewAction::make()->iconButton(),
+                EditAction::make()->iconButton(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->emptyStateIcon('heroicon-o-document-chart-bar')
+            ->emptyStateHeading('No Training Reports Found')
+            ->emptyStateDescription('Upload or process a training report to start tracking performance metrics.');
     }
 }
