@@ -23,7 +23,7 @@ class TrainingReportResource extends Resource
 {
     protected static ?string $model = TrainingReport::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::ClipboardDocumentCheck;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClipboardDocumentCheck;
 
     protected static ?string $recordTitleAttribute = 'name';
 
