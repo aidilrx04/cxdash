@@ -64,6 +64,7 @@ class TrainerForm
                     ->belowLabel(Text::make('A professional headshot or photo (JPEG or PNG). This will be used in client proposals.')),
                 FileUpload::make('profile_picture')
                     ->disk('public')
+                    ->acceptedFileTypes(['image/png', 'image/jpeg'])
                     ->openable()
                     ->required()
                 // ])
