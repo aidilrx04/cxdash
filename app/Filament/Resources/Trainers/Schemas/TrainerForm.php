@@ -8,9 +8,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Text;
 use Filament\Schemas\Schema;
-use Filament\Support\Enums\TextSize;
 
 class TrainerForm
 {
@@ -18,56 +16,104 @@ class TrainerForm
     {
         return $schema
             ->components([
-                // Section::make('Personal Information')->schema([
-                TextInput::make('full_name')
-                    ->helperText('Please use your legal name as it would appear on a contract.')
-                    ->required(),
-                // TextInput::make('commercial_name')
-                //     ->label('The name you wish to be used commercially')
-                //     ->helperText('e.g., on our website, promotional materials, or class schedules')
-                //     ->required(),
-                // Textarea::make('home_address')
-                //     ->required(),
-                // Group::make([
-                //     TextInput::make('street_address_1')
-                //         ->aboveLabel(Text::make('Address')->color('neutral')->size(TextSize::Medium))
-                //         ->required(),
-                //     TextInput::make('street_address_2'),
-                //     Grid::make(2)
-                //         ->schema([
-                //             TextInput::make('city'),
-                //             TextInput::make('state'),
-                //             TextInput::make('zip_code'),
-                //             TextInput::make('country')
-                //         ])
-                // ]),
-                TextInput::make('email')
-                    ->email()
-                    ->label("Email Address")
-                    ->required()
-                    ->helperText('Please enter a valid email address (e.g., name@company.com).'),
-                TextInput::make('phone_number')
-                    ->required(),
-                TextInput::make('years_experience')
-                    ->numeric()
-                    ->required(),
-                Textarea::make('professional_summary')
-                    ->belowLabel(Text::make(
-                        "A brief overview of your training approach and philosophy (2-3 sentences). This will be used in trainer bios for proposals.Example: 'I believe in experiential, learner-centered training that drives measurable behavior change. With 12 years of experience in financial services, I focus on practical application and real-world case studies.'"
-                    ))
-                    ->required(),
-                FileUpload::make('cv_path')
-                    ->label("CV/Resume")
-                    ->disk('public')
-                    ->openable()
-                    ->required()
-                    ->belowLabel(Text::make('A professional headshot or photo (JPEG or PNG). This will be used in client proposals.')),
-                FileUpload::make('profile_picture')
-                    ->disk('public')
-                    ->acceptedFileTypes(['image/png', 'image/jpeg'])
-                    ->openable()
-                    ->required()
-                // ])
+                Grid::make(3)
+                    ->columnSpanFull()
+                    ->schema([
+                        // Left Column: Primary Trainer Info (2 Columns wide)
+                        Group::make()
+                            ->columnSpan(2)
+                            ->schema([
+                                Section::make('Personal Details')
+                                    ->description('Basic contact and legal identification information.')
+                                    ->icon('heroicon-m-user-circle')
+                                    ->columns(2)
+                                    ->schema([
+                                        TextInput::make('full_name')
+                                            ->label('Legal Full Name')
+                                            ->placeholder('e.g., Jane Doe')
+                                            ->prefixIcon('heroicon-m-user')
+                                            ->helperText('Please use your legal name as it would appear on a contract.')
+                                            ->required()
+                                            ->columnSpan(2),
+
+                                        TextInput::make('email')
+                                            ->label('Email Address')
+                                            ->email()
+                                            ->placeholder('name@company.com')
+                                            ->prefixIcon('heroicon-m-envelope')
+                                            ->helperText('Used for official contract notifications.')
+                                            ->required(),
+
+                                        TextInput::make('phone_number')
+                                            ->label('Phone Number')
+                                            ->tel()
+                                            ->placeholder('+60 12-345 6789')
+                                            ->prefixIcon('heroicon-m-phone')
+                                            ->required(),
+                                    ]),
+
+                                Section::make('Professional Background')
+                                    ->description('Highlight trainer expertise and proposal overview.')
+                                    ->icon('heroicon-m-briefcase')
+                                    ->schema([
+                                        TextInput::make('years_experience')
+                                            ->label('Years of Experience')
+                                            ->numeric()
+                                            ->minValue(0)
+                                            ->maxValue(50)
+                                            ->suffix('Years')
+                                            ->prefixIcon('heroicon-m-clock')
+                                            ->placeholder('e.g., 8')
+                                            ->required(),
+
+                                        Textarea::make('professional_summary')
+                                            ->label('Professional Summary & Philosophy')
+                                            ->rows(4)
+                                            ->placeholder("Example: 'I believe in experiential, learner-centered training that drives measurable behavior change. With 12 years of experience in financial services, I focus on practical application and real-world case studies.'")
+                                            ->helperText('A brief overview of your training approach (2-3 sentences). Used in client proposals.')
+                                            ->required(),
+                                    ]),
+                            ]),
+
+                        // Right Column: Media & Documents Sidebar (1 Column wide)
+                        Group::make()
+                            ->columnSpan(1)
+                            ->schema([
+                                Section::make('Profile Picture')
+                                    ->description('Professional headshot for client proposals.')
+                                    ->icon('heroicon-m-photo')
+                                    ->schema([
+                                        FileUpload::make('profile_picture')
+                                            ->label('')
+                                            ->disk('public')
+                                            ->directory('trainers/avatars')
+                                            ->image()
+                                            ->avatar()
+                                            ->imageEditor()
+                                            ->acceptedFileTypes(['image/png', 'image/jpeg'])
+                                            ->maxSize(5120) // 5MB
+                                            ->required()
+                                            ->alignCenter()
+                                            ->helperText('Upload a high-resolution JPEG or PNG headshot.'),
+                                    ]),
+
+                                Section::make('Curriculum Vitae (CV)')
+                                    ->description('Official resume or biography document.')
+                                    ->icon('heroicon-m-document-text')
+                                    ->schema([
+                                        FileUpload::make('cv_path')
+                                            ->label('Upload CV / Resume')
+                                            ->disk('public')
+                                            ->directory('trainers/cvs')
+                                            ->acceptedFileTypes(['application/pdf'])
+                                            ->maxSize(10240) // 10MB
+                                            ->openable()
+                                            ->downloadable()
+                                            ->required()
+                                            ->helperText('PDF format up to 10MB.'),
+                                    ]),
+                            ]),
+                    ]),
             ]);
     }
 }
