@@ -33,6 +33,7 @@ class EducationRelationManager extends RelationManager
         return $schema
             ->components([
                 Grid::make(2)
+                    ->columnSpanFull()
                     ->schema([
                         TextInput::make('name')
                             ->label('Degree / Qualification')
@@ -51,7 +52,7 @@ class EducationRelationManager extends RelationManager
 
                         TextInput::make('institution_name')
                             ->label('Institution / University')
-                            ->placeholder('e.g., Universiti Teknikal Malaysia Melaka (UTeM)')
+                            ->placeholder('e.g., Universiti Malaya (UM)')
                             ->prefixIcon('heroicon-m-building-library')
                             ->required()
                             ->columnSpan(2),
