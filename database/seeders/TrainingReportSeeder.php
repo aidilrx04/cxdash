@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Client;
 use App\Models\FeedbackGeneral;
 use App\Models\FeedbackQuestion;
 use App\Models\Sentiment;
@@ -20,6 +21,7 @@ class TrainingReportSeeder extends Seeder
         $questions = FeedbackQuestion::factory(4)->create();
         $reports = TrainingReport::factory(10)
             ->has(Trainee::factory(10))
+            ->for(Client::factory())
             ->create();
 
         foreach ($reports as $report) {
