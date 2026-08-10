@@ -23,6 +23,7 @@ use App\Filament\Resources\Trainers\Tables\TrainersTable;
 use App\Models\Tool;
 use App\Models\Trainer;
 use BackedEnum;
+use Filament\Resources\RelationManagers\RelationGroup;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -54,17 +55,28 @@ class TrainerResource extends Resource
     public static function getRelations(): array
     {
         return [
-            SocialMediaRelationManager::class,
-            EducationRelationManager::class,
-            CertificatesRelationManager::class,
-            SpecializationsRelationManager::class,
-            IndustriesRelationManager::class,
-            ToolsRelationManager::class,
-            TrainingMethodsRelationManager::class,
-            LanguagesRelationManager::class,
-            AiSkillsRelationManager::class,
-            WorkExperiencesRelationManager::class,
-            TrainingExperiencesRelationManager::class,
+            RelationGroup::make('Profile & Credentials', [
+                RelationManagers\SocialMediaRelationManager::class,
+                RelationManagers\EducationRelationManager::class,
+                RelationManagers\CertificatesRelationManager::class,
+            ]),
+
+            RelationGroup::make('Domains & Expertise', [
+                RelationManagers\SpecializationsRelationManager::class,
+                RelationManagers\IndustriesRelationManager::class,
+            ]),
+
+            RelationGroup::make('Skills & Capabilities', [
+                RelationManagers\ToolsRelationManager::class,
+                RelationManagers\AiSkillsRelationManager::class,
+                RelationManagers\TrainingMethodsRelationManager::class,
+                RelationManagers\LanguagesRelationManager::class,
+            ]),
+
+            RelationGroup::make('Experience & Track Record', [
+                RelationManagers\WorkExperiencesRelationManager::class,
+                RelationManagers\TrainingExperiencesRelationManager::class,
+            ]),
         ];
     }
 
