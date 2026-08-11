@@ -16,6 +16,7 @@ class TrainingReport extends Model
         'file_name',
         'program_title',
         'client_name',
+        'client_id',
         'trainer_name',
         'total_participants',
         'total_evaluation',

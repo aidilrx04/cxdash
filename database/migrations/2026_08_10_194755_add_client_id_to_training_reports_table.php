@@ -13,7 +13,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('training_reports', function (Blueprint $table) {
-            $table->foreignIdFor(Client::class);
+            $table->foreignIdFor(Client::class)
+                ->nullable()
+                ->after('client_name');
         });
     }
 

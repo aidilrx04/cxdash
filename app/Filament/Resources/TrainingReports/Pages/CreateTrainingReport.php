@@ -4,8 +4,10 @@ namespace App\Filament\Resources\TrainingReports\Pages;
 
 use App\Filament\Resources\TrainingReports\TrainingReportResource;
 use App\Jobs\GenerateSentiments;
+use App\Models\Client;
 use App\Models\FeedbackGeneral;
 use App\Models\FeedbackQuestion;
+use App\Models\TrainingReport;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\DB;
@@ -19,6 +21,9 @@ class CreateTrainingReport extends CreateRecord
 
     protected function afterCreate()
     {
+        /**
+         * @var TrainingReport $record
+         */
         $record = $this->record;
         $reportFilePath = Storage::disk('local')->path($record->file_path);
 
@@ -48,6 +53,12 @@ class CreateTrainingReport extends CreateRecord
                     'status' => $extractedData['status'] ?? null,
                     'pss_score' => $extractedData['pss_score'] ?? null,
                 ]);
+
+                if (isset($extractedData['client_name'])) {
+                    $client_name = $extractedData['client_name'];
+                    $client = Client::firstOrCreate(['name' => $client_name]);
+                    $record->update(['client_id' => $client->id]);
+                }
             }
         } else {
             logger()->error('PDF Parsing failed: ' . $process->getErrorOutput());
