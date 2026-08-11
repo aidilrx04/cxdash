@@ -12,11 +12,22 @@ class Client extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name'
+        'name',
     ];
 
     public function trainingReports(): HasMany
     {
         return $this->hasMany(TrainingReport::class);
+    }
+
+    /**
+     * Get maximum participants across all training reports.
+     * Uses eager-loaded subquery attribute when available, falling back to query.
+     */
+    public function maxPax(): int
+    {
+        return (int) ($this->training_reports_max_total_participants
+            ?? $this->trainingReports()->max('total_participants')
+            ?? 0);
     }
 }
