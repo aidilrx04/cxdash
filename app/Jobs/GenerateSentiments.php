@@ -133,7 +133,7 @@ class GenerateSentiments implements ShouldQueue
             ->title('Sentiment Analysis completed')
             ->actions([
                 Action::make('view')
-                    ->url(TrainingReportResource::getUrl('view', ['record' => $this->trainingReport, 'relation' => 1]))
+                    ->url(TrainingReportResource::getUrl('view', ['record' => $this->trainingReport, 'relation' => 'feedback_generals']))
             ])
             ->success()
             ->sendToDatabase($this->user);

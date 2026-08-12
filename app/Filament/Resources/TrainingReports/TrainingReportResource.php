@@ -45,9 +45,9 @@ class TrainingReportResource extends Resource
     public static function getRelations(): array
     {
         return [
-            TraineesRelationManager::class,
+            'trainees' => TraineesRelationManager::class,
             // SentimentsRelationManager::class,
-            FeedbackGeneralsRelationManager::class,
+            'feedback_generals' => FeedbackGeneralsRelationManager::class,
         ];
     }
 
