@@ -28,6 +28,7 @@ class TrainingReportFactory extends Factory
             'status' => fake()->colorName(),
             'pss_score' => fake()->numberBetween(10, 100),
             'file_path' => fake()->filePath(),
+            'executive_summary' => fake()->paragraphs(6, true),
         ];
     }
 }

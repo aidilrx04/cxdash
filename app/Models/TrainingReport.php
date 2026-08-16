@@ -23,6 +23,7 @@ class TrainingReport extends Model
         'overall_satisfaction',
         'status',
         'pss_score',
+        'executive_summary',
         'file_path',
     ];
 

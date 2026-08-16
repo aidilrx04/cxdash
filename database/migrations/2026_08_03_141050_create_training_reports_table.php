@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('overall_satisfaction')->nullable();
             $table->string('status')->nullable();
             $table->string('pss_score')->nullable();
+            $table->longText('executive_summary')->nullable();
 
             $table->timestamps();
         });
