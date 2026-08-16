@@ -3,7 +3,9 @@
 namespace App\Filament\Resources\TrainingReports\Schemas;
 
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -122,6 +124,13 @@ class TrainingReportForm
                             ->step(0.01)
                             ->prefixIcon('heroicon-m-star')
                             ->placeholder('e.g., 4.85'),
+                    ]),
+                Section::make('Executive Summary')
+                    // ->columns(2)
+                    // ->columnSpanFull()
+                    ->hiddenOn('create')
+                    ->schema([
+                        RichEditor::make('executive_summary'),
                     ]),
             ]);
     }
