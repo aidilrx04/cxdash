@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\TrainingReports\Schemas;
 
+use Filament\Actions\Action;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
@@ -9,6 +10,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Facades\Storage;
 
 class TrainingReportForm
 {
@@ -132,6 +134,13 @@ class TrainingReportForm
                     ->hiddenOn('create')
                     ->schema([
                         RichEditor::make('executive_summary'),
+                    ])
+                    ->headerActions([
+                        Action::make('auto_summarizer')
+                            ->extraAttributes(function ($record) {
+                                // dd(Storage::url($record->file_path));
+                                return ['data-summarizer' => true, 'data-file-path' => url(Storage::url($record->file_path))];
+                            })
                     ]),
             ]);
     }
