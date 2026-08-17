@@ -26,6 +26,7 @@ class TrainingReportForm
                             ->label('PDF Report File')
                             ->disk('public')
                             ->directory('uploads')
+                            ->storeFileNamesIn('file_name')
                             ->acceptedFileTypes(['application/pdf'])
                             ->maxSize(20480) // 20 MB Limit
                             ->required()
@@ -42,7 +43,7 @@ class TrainingReportForm
                             ->dehydrated()
                             ->prefixIcon('heroicon-m-paper-clip')
                             ->placeholder('e.g., Training_Report_2026.pdf')
-                            ->hiddenOn('create')
+                            // ->hiddenOn('create')
                             ->columnSpanFull(),
                     ]),
 
