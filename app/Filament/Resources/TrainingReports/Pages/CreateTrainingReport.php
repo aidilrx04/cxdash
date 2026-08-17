@@ -25,25 +25,25 @@ class CreateTrainingReport extends CreateRecord
          * @var TrainingReport $record
          */
         $record = $this->record;
-        $reportFilePath = Storage::disk('local')->path($record->file_path);
+        $reportFilePath = Storage::disk('public')->path($record->file_path);
 
-        Storage::disk('local')->makeDirectory('parsed');
+        Storage::disk('public')->makeDirectory('parsed');
 
         // Path to Python executable in venv & script
         $venvPython = base_path('lib/pdfparser/venv/Scripts/python.exe'); // Use 'venv/Scripts/python.exe' on Windows
         $scriptPath = base_path('lib/pdfparser/report_information.py');
 
         // Run Python Process
-        $process = new Process([$venvPython, $scriptPath, $reportFilePath, Storage::disk('local')->path("parsed/" . basename($record->file_path) . ".json")]);
+        $process = new Process([$venvPython, $scriptPath, $reportFilePath, Storage::disk('public')->path("parsed/" . basename($record->file_path) . ".json")]);
         $process->run();
 
         if ($process->isSuccessful()) {
-            $extractedData = json_decode(file_get_contents(Storage::disk('local')->path("parsed/" . basename($record->file_path) . ".json")), true);
+            $extractedData = json_decode(file_get_contents(Storage::disk('public')->path("parsed/" . basename($record->file_path) . ".json")), true);
 
             if (is_array($extractedData)) {
                 // Populate step 2 fields
                 $record->update([
-                    'file_name' => basename($record->file_path),
+                    // 'file_name' => basename($record->file_path),
                     'program_title' => $extractedData['program_title'] ?? null,
                     'client_name' => $extractedData['client_name'] ?? null,
                     'trainer_name' => $extractedData['trainer_name'] ?? null,
@@ -65,7 +65,7 @@ class CreateTrainingReport extends CreateRecord
         }
 
         DB::beginTransaction();
-        $parsed_file = Storage::disk('local')->path("parsed/" . basename($record->file_path) . ".json");
+        $parsed_file = Storage::disk('public')->path("parsed/" . basename($record->file_path) . ".json");
         $report_information = json_decode(file_get_contents($parsed_file), true);
 
         // participants

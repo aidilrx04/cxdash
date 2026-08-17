@@ -42,14 +42,14 @@ class GenerateSentiments implements ShouldQueue
         $this->trainingReport = $trainingReport;
 
         // Ensure destination folder exists inside storage/app/private/sentiments
-        Storage::disk('local')->makeDirectory('sentiments');
+        Storage::disk('public')->makeDirectory('sentiments');
 
-        $this->outputPath = Storage::disk('local')->path("sentiments/{$id}.xlsx");
+        $this->outputPath = Storage::disk('public')->path("sentiments/{$id}.xlsx");
 
         $this->user = filament()->auth()->user();
 
         if ($this->isTest) {
-            $this->outputPath = Storage::disk('local')->path(Storage::disk('local')->files('sentiments')[0]);
+            $this->outputPath = Storage::disk('public')->path(Storage::disk('public')->files('sentiments')[0]);
         }
     }
 
@@ -61,7 +61,7 @@ class GenerateSentiments implements ShouldQueue
         if ($this->isTest === false) {
 
             // 1. Resolve absolute path of input report file
-            $inputPath = realpath(Storage::disk('local')->path($this->trainingReport->file_path));
+            $inputPath = realpath(Storage::disk('public')->path($this->trainingReport->file_path));
 
             // 2. Define process command array
             // Adjust the python binary path (e.g., venv python) if necessary

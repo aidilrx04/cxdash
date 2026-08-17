@@ -24,7 +24,7 @@ class TrainingReportForm
                     ->schema([
                         FileUpload::make('file_path')
                             ->label('PDF Report File')
-                            ->disk('local')
+                            ->disk('public')
                             ->directory('uploads')
                             ->acceptedFileTypes(['application/pdf'])
                             ->maxSize(20480) // 20 MB Limit
