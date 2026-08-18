@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\TrainingReports\Schemas;
 
+use App\Models\FeedbackGeneral;
+use App\Models\FeedbackQuestion;
 use Filament\Actions\Action;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
@@ -138,8 +140,42 @@ class TrainingReportForm
                     ->headerActions([
                         Action::make('auto_summarizer')
                             ->extraAttributes(function ($record) {
-                                // dd(Storage::url($record->file_path));
-                                return ['data-summarizer' => true, 'data-file-path' => url(Storage::url($record->file_path))];
+                                // Safe check for file path
+                                $filePath = $record->file_path ? Storage::url($record->file_path) : null;
+
+                                // Fetch question IDs in a single query to minimize database hits
+                                $questions = FeedbackQuestion::whereIn('question', [
+                                    'What did you like most about the course?',
+                                    'The courses you would probably like to attend.',
+                                ])->pluck('id', 'question');
+
+                                // Pre-fetch trainee IDs once
+                                $traineeIds = $record->trainees()->pluck('id');
+
+                                // Fetch responses for question 1
+                                $feedbacksLikeMost = [];
+                                if (isset($questions['What did you like most about the course?'])) {
+                                    $feedbacksLikeMost = FeedbackGeneral::where('feedback_question_id', $questions['What did you like most about the course?'])
+                                        ->whereIn('trainee_id', $traineeIds)
+                                        ->pluck('response')
+                                        ->toArray();
+                                }
+
+                                // Fetch responses for question 2
+                                $feedbacksFutureCourses = [];
+                                if (isset($questions['The courses you would probably like to attend.'])) {
+                                    $feedbacksFutureCourses = FeedbackGeneral::where('feedback_question_id', $questions['The courses you would probably like to attend.'])
+                                        ->whereIn('trainee_id', $traineeIds)
+                                        ->pluck('response')
+                                        ->toArray();
+                                }
+
+                                return [
+                                    'data-summarizer' => 'true',
+                                    'data-file-path' => $filePath,
+                                    'data-question-like-the-most' => e(json_encode($feedbacksLikeMost)),
+                                    'data-question-future-courses' => e(json_encode($feedbacksFutureCourses)),
+                                ];
                             })
                     ]),
             ]);
