@@ -11,6 +11,7 @@
 	],
 	"host_permissions": [
 		"http://localhost:8000/*",
+		"https://localhost:8000/*",
 		"https://notebook.google.com/*",
 		"https://chat.deepseek.com/*",
 		"https://pgtraining-admin.peopleaps.com/*"
