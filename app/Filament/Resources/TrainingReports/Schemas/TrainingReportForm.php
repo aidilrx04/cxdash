@@ -8,7 +8,6 @@ use Filament\Actions\Action;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -135,7 +134,10 @@ class TrainingReportForm
                     // ->columnSpanFull()
                     ->hiddenOn('create')
                     ->schema([
-                        RichEditor::make('executive_summary'),
+                        RichEditor::make('executive_summary')
+                            ->toolbarButtons([
+                                ['bold', 'italic', 'underline', 'strike', 'alignStart', 'alignCenter', 'alignEnd']
+                            ]),
                     ])
                     ->headerActions([
                         Action::make('auto_summarizer')
