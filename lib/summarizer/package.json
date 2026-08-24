@@ -1,0 +1,18 @@
+{
+  "name": "CXSummarizer",
+  "version": "0.0.1",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "keywords": [],
+  "author": "Aidil Suherman",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@crxjs/vite-plugin": "^2.7.1",
+    "vite": "^8.2.2"
+  }
+}
