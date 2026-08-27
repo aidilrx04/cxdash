@@ -1,15 +1,16 @@
 import { defineManifest } from '@crxjs/vite-plugin';
-import packageJson from './package.json';
+import packageJson from './package.json' with { type: 'json' };
 const { version } = packageJson;
 
-// Convert from Semver (example: 0.1.0-beta6)
-const [ major, minor, patch, label = '0' ] = version
-	// can only contain digits, dots, or dash
-	.replace( /[^\d.-]+/g, '' )
-	// split into version parts
-	.split( /[.-]/ );
 
-export default defineManifest( {
+// Convert from Semver (example: 0.1.0-beta6)
+const [major, minor, patch, label = '0'] = version
+	// can only contain digits, dots, or dash
+	.replace(/[^\d.-]+/g, '')
+	// split into version parts
+	.split(/[.-]/);
+
+export default defineManifest({
 	manifest_version: 3,
 	name: 'CXSummarizer',
 	version: `${major}.${minor}.${patch}.${label}`,
@@ -39,7 +40,7 @@ export default defineManifest( {
 		]
 	},
 	background: {
-		service_worker: 'src/service-worker.js'
+		service_worker: 'src/service-worker'
 	},
 	content_scripts: [
 		{
@@ -47,7 +48,7 @@ export default defineManifest( {
 				"http://localhost:8000/*"
 			],
 			"js": [
-				"src/content-origin.js"
+				"src/content-origin"
 			]
 		},
 		{
@@ -55,7 +56,7 @@ export default defineManifest( {
 				"https://notebook.google.com/*"
 			],
 			"js": [
-				"src/content-notebook.js"
+				"src/content-notebook"
 			]
 		},
 		{
@@ -63,7 +64,7 @@ export default defineManifest( {
 				"https://chat.deepseek.com/*"
 			],
 			"js": [
-				"src/content-deepseek.js"
+				"src/content-deepseek"
 			]
 		},
 		{
@@ -71,8 +72,8 @@ export default defineManifest( {
 				"https://pgtraining-admin.peopleaps.com/*"
 			],
 			"js": [
-				"src/content-paps.js"
+				"src/content-paps"
 			]
 		}
 	]
-} );
+});

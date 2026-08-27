@@ -13,6 +13,7 @@
   "type": "module",
   "devDependencies": {
     "@crxjs/vite-plugin": "^2.7.1",
-    "vite": "^8.2.2"
+    "vite": "^8.2.2",
+    "vite-plugin-zip-pack": "^1.2.4"
   }
 }
