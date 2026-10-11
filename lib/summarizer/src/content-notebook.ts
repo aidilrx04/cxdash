@@ -1,7 +1,3 @@
-/**
- * NotebookLM Automation Content Script
- */
-
 import { ACTIONS, EXT_ID, setInputValue, simulateHover, StorageUtils, waitForElement, waitForElements } from "./util";
 
 // ==========================================
@@ -137,11 +133,23 @@ async function handleExecutionStep() {
   const queryBox = await waitForElement(config.SELECTORS.QUERY_BOX) as HTMLInputElement;
   setInputValue(queryBox, config.COMMAND_PROMPT);
 
-  const submitBtn = await waitForElement(config.SELECTORS.SUBMIT_BTN) as HTMLButtonElement;
-  submitBtn.click();
+  const enterEvent = new KeyboardEvent('keydown', {
+    key: 'Enter',
+    code: 'Enter',
+    keyCode: 13,
+    which: 13,
+    bubbles: true,
+    cancelable: true
+  });
+  queryBox.dispatchEvent(enterEvent)
+
+  // const submitBtn = await waitForElement(config.SELECTORS.SUBMIT_BTN) as HTMLButtonElement;
+  // submitBtn.click();
+
+  const submitContainer = await waitForElement('.bottom-right-container') as HTMLDivElement
 
   // 5. Inject custom "Continue" trigger button
-  injectContinueButton(submitBtn);
+  injectContinueButton(submitContainer);
 }
 
 // ==========================================
@@ -151,8 +159,8 @@ async function handleExecutionStep() {
 /**
  * Injects a custom "Continue" button above the submit container
  */
-function injectContinueButton(submitBtn: HTMLElement) {
-  submitBtn.style.position = 'relative';
+function injectContinueButton(container: HTMLElement) {
+  container.style.position = 'relative';
 
   const continueBtn = document.createElement('button');
   continueBtn.type = 'button';
@@ -179,9 +187,11 @@ function injectContinueButton(submitBtn: HTMLElement) {
     finishOrchestration();
   });
 
-  if (submitBtn.parentElement && submitBtn.parentElement.children[0]) {
-    submitBtn.parentElement.children[0].after(continueBtn);
-  }
+  // if (submitBtn.parentElement && submitBtn.parentElement.children[0]) {
+  //   submitBtn.parentElement.children[0].after(continueBtn);
+  // }
+
+  container.insertBefore(continueBtn, container.children[0],)
 }
 
 /**
@@ -261,16 +271,35 @@ async function removeUnallowedSources() {
   }
 }
 
-// ==========================================
-// 5. APPLICATION ENTRY POINT
-// ==========================================
-(async function init() {
-  const params = new URLSearchParams(window.location.search);
-  const step = params.get('step');
+async function main() {
+  const store = await chrome.storage.local.get('id')
 
-  if (step && step === '2') {
-    await handleExecutionStep();
-  } else {
-    await handleFileUploadStep();
+  if (!store.id) {
+    console.log('[NOTEBOOK] Summarizer is not running.')
+    return;
   }
-})();
+
+  console.log('[NOTEBOOK] Running summarizer')
+
+  const params = new URLSearchParams(window.location.search)
+  const step = params.get('step')
+
+  if (step && step == '2') {
+    await handleExecutionStep()
+  }
+  else {
+    await handleFileUploadStep()
+  }
+}
+
+main();
+// (async function init() {
+//   const params = new URLSearchParams(window.location.search);
+//   const step = params.get('step');
+
+//   if (step && step === '2') {
+//     await handleExecutionStep();
+//   } else {
+//     await handleFileUploadStep();
+//   }
+// })();

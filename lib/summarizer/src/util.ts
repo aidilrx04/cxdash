@@ -26,6 +26,7 @@ export interface PendingFilePayload {
 	name: string;
 	dataUrl: string;
 	mimeType: string;
+	path: string;
 }
 
 export interface ReconstructedFile {
@@ -90,12 +91,12 @@ export const StorageUtils = {
 	 * Retrieves pending file from chrome.storage and reconstructs a File object.
 	 */
 	async getPendingFile(): Promise<ReconstructedFile | null> {
-		const store = await chrome.storage.local.get(['pendingFile']);
-		const pendingFile = store.pendingFile as PendingFilePayload | undefined;
+		const store = await chrome.storage.local.get(['reportFile']);
+		const pendingFile = store.reportFile as PendingFilePayload | undefined;
 
 		if (!pendingFile) return null;
 
-		const { name, dataUrl, mimeType } = pendingFile;
+		const { name, dataUrl, mimeType, path } = pendingFile;
 		const response = await fetch(dataUrl);
 		const blob = await response.blob();
 
