@@ -59,9 +59,9 @@ def create_execsum_page(page: pymupdf.Page) -> pymupdf.Page:
 
 def merge_execsum_page(complete: pymupdf.Document, gen: pymupdf.Document) -> pymupdf.Document:
 	final = pymupdf.open()
-	final.insert_pdf(complete, from_page=0,to_page=1)
+	final.insert_pdf(complete, from_page=0,to_page=0)
 	final.insert_pdf(gen,from_page=2,to_page=2)
-	final.insert_pdf(complete,from_page=3,to_page=complete.page_count)
+	final.insert_pdf(complete,from_page=1,to_page=complete.page_count)
 
 	return final
 
