@@ -1,12 +1,19 @@
 export const EXT_ID = chrome.runtime.id;
 
 export enum ACTIONS {
-	START,
+	START = 1,
 	NOTEBOOK_COMPLETE,
 	DEEPSEEK_COMPLETE,
 	PAPS_START,
 	PAPS_COMPLETE,
 	FINISH
+}
+
+export enum STATUS {
+	PENDING = 1,
+	RUNNING,
+	FAILED,
+	COMPLETED,
 }
 
 export const CONFIG = {
