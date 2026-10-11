@@ -20,6 +20,10 @@ def main():
 
 	final_report = merge_execsum_page(complete_report, gen_report)
 
+	metadata = final_report.metadata
+	metadata['title'] = "PEOPLEAPS - Report"
+
+	final_report.set_metadata(metadata)
 	final_report.save(output_path)
 
 	print(output_path)
