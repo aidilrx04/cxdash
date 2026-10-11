@@ -50,7 +50,7 @@ class TrainingReportInfolist
                                     ->icon('heroicon-m-arrow-down-tray')
                                     ->color('primary')
                                     ->visible(fn($record) => ! empty($record->file_path))
-                                    ->action(fn($record) => Storage::download($record->file_path, $record->file_name ?? null))
+                                    ->action(fn($record) => Storage::disk('public')->download($record->file_path, $record->file_name ?? null))
                             ),
                     ]),
 

@@ -6,6 +6,7 @@ use App\Models\FeedbackGeneral;
 use App\Models\FeedbackQuestion;
 use Filament\Actions\Action;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -19,6 +20,9 @@ class TrainingReportForm
     {
         return $schema
             ->components([
+                Hidden::make('id')
+                    ->hiddenOn('create')
+                    ->default(fn($record) => $record?->id),
                 // Primary File Upload Section (Visible during creation and editing)
                 Section::make('Report Document')
                     ->description('Upload the processed PDF training report file.')
@@ -140,6 +144,11 @@ class TrainingReportForm
                             ]),
                     ])
                     ->headerActions([
+                        Action::make('Generate Report')
+                            ->label('Generate Report')
+                            ->extraAttributes(function ($record) {
+                                return ['data-generate-report' => true, 'data-executive-summary' => e($record->executive_summary)];
+                            }),
                         Action::make('auto_summarizer')
                             ->extraAttributes(function ($record) {
                                 // Safe check for file path
