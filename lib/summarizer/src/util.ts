@@ -4,6 +4,8 @@ export enum ACTIONS {
 	START,
 	NOTEBOOK_COMPLETE,
 	DEEPSEEK_COMPLETE,
+	PAPS_START,
+	PAPS_COMPLETE,
 	FINISH
 }
 
@@ -46,6 +48,10 @@ export async function waitForElements(selector: string, timeout = CONFIG.TIMEOUT
 export async function waitForElement(selector: string, timeout?: number) {
 	const elements = await waitForElements(selector, timeout);
 	return elements[0];
+}
+
+export async function wait(ms: number) {
+	await (new Promise((resolve, reject) => setTimeout(resolve, ms)))
 }
 
 /**

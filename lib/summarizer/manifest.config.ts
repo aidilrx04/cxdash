@@ -40,7 +40,7 @@ export default defineManifest({
 		]
 	},
 	background: {
-		service_worker: 'src/service-worker'
+		service_worker: 'src/service-worker.ts'
 	},
 	content_scripts: [
 		{
@@ -48,7 +48,7 @@ export default defineManifest({
 				"http://localhost:8000/*"
 			],
 			"js": [
-				"src/content-origin"
+				"src/content-origin.ts"
 			]
 		},
 		{
@@ -56,7 +56,7 @@ export default defineManifest({
 				"https://notebook.google.com/*"
 			],
 			"js": [
-				"src/content-notebook"
+				"src/content-notebook.ts"
 			]
 		},
 		{
@@ -64,7 +64,7 @@ export default defineManifest({
 				"https://chat.deepseek.com/*"
 			],
 			"js": [
-				"src/content-deepseek"
+				"src/content-deepseek.ts"
 			]
 		},
 		{
@@ -72,8 +72,18 @@ export default defineManifest({
 				"https://pgtraining-admin.peopleaps.com/*"
 			],
 			"js": [
-				"src/content-paps"
+				"src/content-paps.ts"
 			]
+		},
+		{
+			"matches": [
+				"https://pgtraining-admin.peopleaps.com/*"
+			],
+			"js": [
+				"src/interceptor.iife.ts",
+			],
+			run_at: "document_start",
+			world: 'MAIN'
 		}
 	]
 });

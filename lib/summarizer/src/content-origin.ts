@@ -7,7 +7,8 @@ const config = {
   SELECTORS: {
     ACTION_BUTTON: '[data-summarizer]',
     TIPTAP_EDITOR: '.tiptap.ProseMirror',
-    FORM_FILE_NAME: 'form.file_name'
+    FORM_FILE_NAME: 'form.file_name',
+    GENERATE_REPORT_BUTTON: '[data-generate-report]'
   }
 } as const;
 
@@ -15,6 +16,7 @@ function main() {
   console.log('Script initialized');
   registerListener();
   registerActionButton();
+  bindGenerateReportButton()
 }
 
 // ============================================================================
@@ -35,6 +37,18 @@ function registerListener() {
 
       // FIX 1: MUST return true to keep the async sendResponse channel open
       return true;
+    }
+
+    if (message.action === ACTIONS.PAPS_COMPLETE) {
+      sendReport()
+        .then(() => {
+          console.log('report sent')
+        })
+        .catch((e) => {
+          console.error('failed to send report', e)
+        });
+      sendResponse(true)
+      return true
     }
 
     console.warn('Unknown message received:', message);
@@ -192,6 +206,30 @@ function pasteRawMarkdown(markdownText: string) {
   });
 
   editorEl.dispatchEvent(pasteEvent);
+}
+
+async function bindGenerateReportButton() {
+  const btn = await waitForElement(config.SELECTORS.GENERATE_REPORT_BUTTON) as HTMLButtonElement
+
+  btn.addEventListener('click', () => {
+    chrome.runtime.sendMessage(EXT_ID, {
+      action: ACTIONS.PAPS_START,
+      executiveSummary: btn.dataset.executiveSummary,
+    })
+  })
+
+  console.log('generate report button binded')
+
+}
+
+async function sendReport() {
+  const { generatedReport } = await chrome.storage.local.get('generatedReport')
+  window.dispatchEvent(new CustomEvent('CX_SUMMARIZER_COMMAND', {
+    detail: {
+      action: 'REPORT',
+      generatedReport,
+    }
+  }))
 }
 
 main();
