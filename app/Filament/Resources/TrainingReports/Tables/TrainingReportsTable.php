@@ -30,6 +30,8 @@ class TrainingReportsTable
                     ->sortable()
                     ->searchable()
                     ->weight('bold')
+                    ->limit(50)
+                    ->tooltip(fn(string $state) => $state)
                     ->description(fn(TrainingReport $record): string => $record->client_name ?? 'N/A')
                     ->wrap(),
 
@@ -90,7 +92,7 @@ class TrainingReportsTable
                     ->formatStateUsing(fn($state) => $state ? 'Download' : 'No File')
                     ->icon(fn($state) => $state ? 'heroicon-m-document-arrow-down' : 'heroicon-m-x-circle')
                     ->color(fn($state) => $state ? 'primary' : 'gray')
-                    ->url(fn(TrainingReport $record) => $record->file_path ? Storage::disk('public')->path($record->file_path) : null, shouldOpenInNewTab: true)
+                    ->url(fn(TrainingReport $record) => $record->file_path ? asset('storage/' . $record->file_path) : null, shouldOpenInNewTab: true)
                     ->badge()
                     ->toggleable(),
 
