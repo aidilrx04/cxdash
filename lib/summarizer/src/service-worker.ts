@@ -1,34 +1,28 @@
-import { ACTIONS, EXT_ID } from "./util";
+import config from "./config";
+import { ACTIONS, EXT_ID, STATUS } from "./util";
 
 console.log('service worker init');
 
-const NOTEBOOK_LINK = 'https://notebook.google.com/notebook/a70e73b2-bab4-4226-8b5c-a55b00fc2548';
 
 // Relay messages between tabs
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+  await chrome.storage.local.clear()
+
   console.log(message)
-  if (message.action === "START_ORCHESTRATION") {
+  if (message.action === ACTIONS.START) {
     await chrome.storage.local.set({
+      id: message.id,
       originalSender: sender,
-      userPrompt: message.prompt,
-      filePath: message.filePath,
-      status: "RUNNING",
-      pendingFile: {
-        name: message.fileName,
-        dataUrl: message.fileDataUrl,
-        mimeType: message.mimeType,
-        timestamp: Date.now()
-      },
+      status: STATUS.RUNNING,
+      reportFile: message.reportFile,
       feedback1: message.feedback1,
       feedback2: message.feedback2,
     });
 
     // Step 1: Open NotebookLM
-    chrome.tabs.create({ url: NOTEBOOK_LINK }, (tab) => {
-      chrome.storage.local.set({ notebookTabId: tab.id });
-    });
+    chrome.tabs.create({ url: config.sites.notebook });
 
-    sendResponse({ status: "Orchestration Started" });
+    sendResponse({ status: "Started" });
 
     return true;
   }
