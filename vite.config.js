@@ -13,6 +13,7 @@ export default defineConfig( {
                 'app/Providers/Filament/**',
                 'resources/views/**',
                 'resources/js/**',
+                'lib/summarizer/**'
             ],
             // fonts: [
             //     bunny('Instrument Sans', {
