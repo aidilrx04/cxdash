@@ -148,13 +148,17 @@ async function triggerSummarization(button: HTMLButtonElement) {
   const payload = {
     id: actionId,
     action: ACTIONS.START,
-    filePath,
-    fileName,
-    fileDataUrl: fileData.dataUrl,
-    mimeType: fileData.mimeType,
+    reportFile: {
+      path: filePath,
+      name: fileName,
+      dataUrl: fileData.dataUrl,
+      mimeType: fileData.mimeType,
+    },
     feedback1: button.dataset.questionLikeTheMost,
     feedback2: button.dataset.questionFutureCourses
   };
+
+  // console.log(payload)
 
   chrome.runtime.sendMessage(EXT_ID, payload, (response) => {
     if (chrome.runtime.lastError) {
