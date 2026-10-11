@@ -42,13 +42,16 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   }
 
   // Step 3: DeepSeek completed -> Open PAPS Local
-  if (message.action === "DEEPSEEK_COMPLETE") {
+  if (message.action === ACTIONS.DEEPSEEK_COMPLETE) {
     const originalSender = (await chrome.storage.local.get(['originalSender'])).originalSender
+
     if (!originalSender) {
       console.error('Original sender is not set!')
       return;
     }
-
+    await chrome.storage.local.set({
+      action: ACTIONS.DEEPSEEK_COMPLETE
+    })
     handleProcessComplete(originalSender);
     if (sender.tab?.id) {
       await chrome.tabs.remove(sender.tab.id);
@@ -106,19 +109,35 @@ async function handleProcessComplete(originalSender: chrome.runtime.MessageSende
   const tabId = originalSender.tab.id;
   const windowId = originalSender.tab.windowId;
 
-  console.log(tabId, windowId);
-
   try {
     // --- tabs.switchTo( originalSender ) ---
     await chrome.tabs.update(tabId, { active: true });
     if (windowId) {
-      console.log(2);
       await chrome.windows.update(windowId, { focused: true });
-      console.log(3);
     }
     await chrome.tabs.sendMessage(tabId, {
-      action: 'process_complete',
+      action: ACTIONS.FINISH,
       data: 'Process finished successfully'
+    }, async ({ status, action }) => {
+      if (action) {
+        // complete
+        await chrome.storage.local.remove([
+          'notebookOutput',
+          'deepseekOutput',
+          'id',
+          'reportFile',
+          'originalSender',
+          'feedback1',
+          'feedback2',
+          'action'
+        ]);
+
+        await chrome.storage.local.set({
+          status: STATUS.IDLE
+        })
+
+        console.log('Process Completed');
+      }
     });
 
   } catch (error) {

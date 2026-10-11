@@ -1,4 +1,4 @@
-import { EXT_ID, waitForElement, waitForElements } from "./util";
+import { ACTIONS, EXT_ID, waitForElement, waitForElements } from "./util";
 
 /**
  * Configuration & Constant Rules
@@ -141,7 +141,7 @@ const UIBuilder = {
         console.error('[Workflow] Failed reading clipboard or copying text:', err);
       } finally {
         chrome.runtime.sendMessage(EXT_ID, {
-          action: 'DEEPSEEK_COMPLETE',
+          action: ACTIONS.DEEPSEEK_COMPLETE,
         });
       }
     });

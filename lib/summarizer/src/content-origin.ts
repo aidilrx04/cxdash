@@ -29,7 +29,7 @@ function registerListener() {
 
     if (message.action === ACTIONS.FINISH) {
       handleFinishAction()
-        .then(() => sendResponse({ status: 'success' }))
+        .then(() => sendResponse({ status: 'success', action: ACTIONS.FINISH }))
         .catch((err) => {
           console.error('Failed to handle completion:', err);
           sendResponse({ status: 'error', message: err.message });
@@ -59,7 +59,7 @@ async function handleFinishAction(): Promise<boolean> {
 
   const { notebookOutput = '', deepseekOutput = '' } = await chrome.storage.local.get([
     'notebookOutput',
-    'deepseekOutput'
+    // 'deepseekOutput'
   ]);
 
   const combinedOutput = `${notebookOutput}\n\n${deepseekOutput}`.trim();

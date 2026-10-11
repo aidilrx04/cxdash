@@ -12,7 +12,7 @@ export enum ACTIONS {
 }
 
 export enum STATUS {
-	PENDING = 1,
+	IDLE = 1,
 	RUNNING,
 	FAILED,
 	COMPLETED,
