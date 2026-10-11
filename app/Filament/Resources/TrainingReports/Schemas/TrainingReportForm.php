@@ -131,7 +131,7 @@ class TrainingReportForm
                     ]),
                 Section::make('Executive Summary')
                     // ->columns(2)
-                    // ->columnSpanFull()
+                    ->columnSpanFull()
                     ->hiddenOn('create')
                     ->schema([
                         RichEditor::make('executive_summary')
