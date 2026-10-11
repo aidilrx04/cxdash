@@ -35,7 +35,6 @@ function registerListener() {
           sendResponse({ status: 'error', message: err.message });
         });
 
-      // FIX 1: MUST return true to keep the async sendResponse channel open
       return true;
     }
 
@@ -102,7 +101,6 @@ function observeChanges() {
   observer.observe(document.body, { childList: true, subtree: true });
   window.addEventListener('popstate', () => bindActionButton());
 }
-console.log('balls')
 
 async function bindActionButton() {
   if (isBinding) return;
@@ -136,6 +134,8 @@ async function bindActionButton() {
 // ============================================================================
 
 async function triggerSummarization(button: HTMLButtonElement) {
+  console.log('Starting summarizer...')
+
   const filePath = button.dataset?.filePath;
   if (!filePath) throw new Error("No file path specified on data-file-path attribute");
 
@@ -143,9 +143,11 @@ async function triggerSummarization(button: HTMLButtonElement) {
   const fileData = await downloadFile(filePath);
   const fileName = extractFileName(filePath);
 
+  const actionId = crypto.randomUUID()
+
   const payload = {
-    action: "START_ORCHESTRATION",
-    prompt: "Quarterly Financial Analysis",
+    id: actionId,
+    action: ACTIONS.START,
     filePath,
     fileName,
     fileDataUrl: fileData.dataUrl,
@@ -160,6 +162,7 @@ async function triggerSummarization(button: HTMLButtonElement) {
       return;
     }
     console.log("Extension response:", response);
+    console.log('Summarizer started')
   });
 }
 
