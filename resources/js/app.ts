@@ -4,9 +4,9 @@
 window.addEventListener('CX_SUMMARIZER_COMMAND', ((event: CustomEvent) => {
 	const { action, generatedReport } = event.detail || {}
 	if (action === 'REPORT') {
-		console.log('report received')
+		// console.log('report received')
 
-		console.log(generatedReport)
+		// console.log(generatedReport)
 
 		// renderReport(generatedReport)
 		saveReport(generatedReport)
