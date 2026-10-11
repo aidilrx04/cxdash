@@ -5,6 +5,7 @@ namespace App\Filament\Resources\TrainingReports\Pages;
 use App\Filament\Resources\TrainingReports\TrainingReportResource;
 use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
+use Illuminate\Contracts\Support\Htmlable;
 
 class ViewTrainingReport extends ViewRecord
 {
@@ -15,5 +16,10 @@ class ViewTrainingReport extends ViewRecord
         return [
             EditAction::make(),
         ];
+    }
+
+    public function getTitle(): string | Htmlable
+    {
+        return $this->getRecordTitle();
     }
 }

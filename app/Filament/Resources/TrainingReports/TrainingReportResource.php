@@ -25,7 +25,7 @@ class TrainingReportResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClipboardDocumentCheck;
 
-    protected static ?string $recordTitleAttribute = 'name';
+    protected static ?string $recordTitleAttribute = 'program_title';
 
     public static function form(Schema $schema): Schema
     {
