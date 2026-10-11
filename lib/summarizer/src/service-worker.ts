@@ -20,7 +20,7 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     });
 
     // Step 1: Open NotebookLM
-    chrome.tabs.create({ url: config.sites.notebook });
+    chrome.tabs.create({ url: config.sites.notebook.link });
 
     sendResponse({ status: "Started" });
 
