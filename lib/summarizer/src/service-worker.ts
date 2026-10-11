@@ -6,8 +6,6 @@ console.log('service worker init');
 
 // Relay messages between tabs
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
-  await chrome.storage.local.clear()
-
   console.log(message)
   if (message.action === ACTIONS.START) {
     await chrome.storage.local.set({
@@ -28,8 +26,12 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   }
 
   // Step 2: NotebookLM completed -> Open DeepSeek
-  if (message.action === "NOTEBOOK_COMPLETE") {
-    chrome.storage.local.set({ notebookOutput: message.data });
+  if (message.action === ACTIONS.NOTEBOOK_COMPLETE) {
+    chrome.storage.local.set({
+      output: {
+        notebook: message.data
+      }
+    });
 
     // Close NotebookLM tab and open DeepSeek
     if (sender.tab?.id) chrome.tabs.remove(sender.tab.id);
