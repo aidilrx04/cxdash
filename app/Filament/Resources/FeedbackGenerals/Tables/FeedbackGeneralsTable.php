@@ -19,6 +19,18 @@ class FeedbackGeneralsTable
             ->defaultSort('created_at', 'desc')
             ->striped()
             ->columns([
+                TextColumn::make('trainee.trainingReport.program_title')
+                    ->label('Training')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('trainee.trainingReport.trainer_name')
+                    ->label('Trainer')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('trainee.trainingReport.client_name')
+                    ->label('Client')
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('trainee.name')
                     ->label('Trainee')
                     ->searchable()
