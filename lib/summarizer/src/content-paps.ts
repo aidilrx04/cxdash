@@ -7,6 +7,9 @@ const REPORT_HASH = '#/administrator/training-session/1/group/1/detail/report'
 const PAPS_EMAIL_ADDRESS = import.meta.env.VITE_EMAIL_ADDRESS;
 const PAPS_PASSWORD = import.meta.env.VITE_PASSWORD;
 
+const CHAR_PER_LINES = 115
+const TOTAL_LINES = 50
+
 async function main() {
   console.log('CXSummarizer init')
 
@@ -111,7 +114,7 @@ async function fillFormFields() {
 
   const executiveSummary = await chrome.storage.local.get('executiveSummary')
 
-  const textToPaste = executiveSummary.executiveSummary as string
+  const textToPaste = adjustTotalLines(executiveSummary.executiveSummary as string)
   // 1. Focus the editor so insertion happens at current cursor position
   await wait(1500)
   clearCKEditorContent(editorEl)
@@ -236,5 +239,19 @@ async function finish() {
   chrome.runtime.sendMessage(EXT_ID, {
     action: ACTIONS.PAPS_COMPLETE
   })
+}
+
+function adjustTotalLines(text: string) {
+  const tmpEl = document.createElement('div')
+  tmpEl.innerHTML = text
+  const realText = tmpEl.textContent
+
+  const lines = Math.ceil(realText.length / CHAR_PER_LINES)
+  if(lines < TOTAL_LINES) {
+    let missing = TOTAL_LINES - lines
+    text += "<p></p>".repeat(missing)
+  }
+
+  return text
 }
 main();
