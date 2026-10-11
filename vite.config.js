@@ -3,10 +3,10 @@ import laravel from 'laravel-vite-plugin';
 import { bunny } from 'laravel-vite-plugin/fonts';
 import tailwindcss from '@tailwindcss/vite';
 
-export default defineConfig({
+export default defineConfig( {
     plugins: [
-        laravel({
-            input: ['resources/css/app.css', 'resources/js/app.js'],
+        laravel( {
+            input: [ 'resources/css/app.css', 'resources/js/app.ts' ],
             refresh: [
                 'app/Filament/**',
                 'app/Livewire/**',
@@ -20,12 +20,12 @@ export default defineConfig({
             //     }),
             // ],
 
-        }),
+        } ),
         tailwindcss(),
     ],
     server: {
         watch: {
-            ignored: ['**/storage/framework/views/**'],
+            ignored: [ '**/storage/framework/views/**' ],
         },
     },
-});
+} );
