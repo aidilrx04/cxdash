@@ -2,7 +2,9 @@ export const EXT_ID = chrome.runtime.id;
 
 export enum ACTIONS {
 	START = 1,
+	NOTEBOOK_START,
 	NOTEBOOK_COMPLETE,
+	DEEPSEEK_START,
 	DEEPSEEK_COMPLETE,
 	PAPS_START,
 	PAPS_COMPLETE,

@@ -15,6 +15,7 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
       reportFile: message.reportFile,
       feedback1: message.feedback1,
       feedback2: message.feedback2,
+      action: ACTIONS.NOTEBOOK_START,
     });
 
     // Step 1: Open NotebookLM
@@ -30,7 +31,8 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     chrome.storage.local.set({
       output: {
         notebook: message.data
-      }
+      },
+      action: ACTIONS.DEEPSEEK_START
     });
 
     // Close NotebookLM tab and open DeepSeek
