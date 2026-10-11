@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
     {
         FilamentView::registerRenderHook(
             PanelsRenderHook::HEAD_START,
-            fn(): string => Blade::render('@vite(["resources/js/app.js"])'),
+            fn(): string => Blade::render('@vite(["resources/js/app.ts"])'),
         );
 
         Column::configureUsing(function (Column $column) {
