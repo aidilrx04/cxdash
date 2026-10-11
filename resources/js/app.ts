@@ -58,14 +58,14 @@ window.addEventListener('CX_SUMMARIZER_COMMAND', ((event: CustomEvent) => {
 // 	});
 // }
 
-function base64ToArrayBuffer(base64: string) {
-	var binaryString = atob(base64);
-	var bytes = new Uint8Array(binaryString.length);
-	for (var i = 0; i < binaryString.length; i++) {
-		bytes[i] = binaryString.charCodeAt(i);
-	}
-	return bytes.buffer;
-}
+// function base64ToArrayBuffer(base64: string) {
+// 	var binaryString = atob(base64);
+// 	var bytes = new Uint8Array(binaryString.length);
+// 	for (var i = 0; i < binaryString.length; i++) {
+// 		bytes[i] = binaryString.charCodeAt(i);
+// 	}
+// 	return bytes.buffer;
+// }
 
 // async function modifyReport(report?: string) {
 // 	if (!report) return
@@ -111,9 +111,11 @@ async function saveReport(report?: string) {
 		// 2. Create the File object
 		const pdfFile = new File([byteArray], 'report.pdf', { type: 'application/pdf' });
 
-		const reportIdEl = (document.querySelector('[id="form.id"]') as HTMLInputElement)
+		const reportIdEl = (document.querySelector('#cx-generate-report') as HTMLButtonElement)
 
-		const reportId = reportIdEl.value
+		const reportId = reportIdEl.dataset.id
+
+		if (!reportId) throw new Error('no report id detected')
 
 		// 3. Append to FormData
 		const formData = new FormData();

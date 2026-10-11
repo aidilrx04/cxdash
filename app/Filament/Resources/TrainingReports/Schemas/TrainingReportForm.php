@@ -20,10 +20,6 @@ class TrainingReportForm
     {
         return $schema
             ->components([
-                Hidden::make('id')
-                    ->hiddenOn('create')
-                    ->default(fn($record) => $record?->id),
-                // Primary File Upload Section (Visible during creation and editing)
                 Section::make('Report Document')
                     ->description('Upload the processed PDF training report file.')
                     ->icon('heroicon-m-document-text')
@@ -147,7 +143,12 @@ class TrainingReportForm
                         Action::make('Generate Report')
                             ->label('Generate Report')
                             ->extraAttributes(function ($record) {
-                                return ['data-generate-report' => true, 'data-executive-summary' => e($record->executive_summary)];
+                                return [
+                                    'data-generate-report' => true,
+                                    'data-executive-summary' => e($record->executive_summary),
+                                    'data-id' => $record->id,
+                                    'id' => 'cx-generate-report'
+                                ];
                             }),
                         Action::make('auto_summarizer')
                             ->extraAttributes(function ($record) {
