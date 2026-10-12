@@ -179,19 +179,19 @@ class FeedbackGeneralsRelationManager extends RelationManager
                             'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                         ])->deleteFileAfterSend(true);
                     }),
-                CreateAction::make(),
-                AssociateAction::make(),
+                // CreateAction::make(),
+                // AssociateAction::make(),
             ])
             ->recordActions([
-                EditAction::make(),
-                DissociateAction::make(),
-                DeleteAction::make(),
+                // EditAction::make(),
+                // DissociateAction::make(),
+                // DeleteAction::make(),
             ])
             ->toolbarActions([
-                BulkActionGroup::make([
-                    DissociateBulkAction::make(),
-                    DeleteBulkAction::make(),
-                ]),
+                // BulkActionGroup::make([
+                //     DissociateBulkAction::make(),
+                //     DeleteBulkAction::make(),
+                // ]),
             ]);
     }
 }
