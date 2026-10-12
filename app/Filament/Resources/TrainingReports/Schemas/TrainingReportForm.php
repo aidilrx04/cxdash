@@ -137,7 +137,8 @@ class TrainingReportForm
                         TextInput::make('pss_score')
                             ->label('Customer Score')
                             ->columnSpanFull(),
-                    ]),
+                    ])
+                    ->hiddenOn('create'),
             ]);
     }
 }
