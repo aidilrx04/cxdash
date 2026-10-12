@@ -11,6 +11,14 @@ const CHAR_PER_LINES = 115
 const TOTAL_LINES = 50
 
 async function main() {
+  const store = await chrome.storage.local.get('id')
+
+  if (!store.id) {
+    console.log('[PAPS] Summarizer is not running.')
+    return;
+  }
+
+
   console.log('CXSummarizer init')
 
   // TODO: check action before doing anything
@@ -247,7 +255,7 @@ function adjustTotalLines(text: string) {
   const realText = tmpEl.textContent
 
   const lines = Math.ceil(realText.length / CHAR_PER_LINES)
-  if(lines < TOTAL_LINES) {
+  if (lines < TOTAL_LINES) {
     let missing = TOTAL_LINES - lines
     text += "<p></p>".repeat(missing)
   }
