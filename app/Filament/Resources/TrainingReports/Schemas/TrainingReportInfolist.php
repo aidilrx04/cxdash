@@ -12,6 +12,7 @@ use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Colors\Color;
+use Filament\Support\Enums\TextSize;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Storage;
 
@@ -42,19 +43,23 @@ class TrainingReportInfolist
                                     ->schema([
                                         TextEntry::make('total_participants')
                                             ->label('Participants')
-                                            ->badge()
-                                            ->color(Color::Blue),
+                                            // ->badge()
+                                            ->color(Color::Blue)
+                                            ->size(TextSize::Large),
                                         TextEntry::make('total_evaluation')
                                             ->label('Evaluation')
-                                            ->badge()
+                                            // ->badge()
+                                            ->size(TextSize::Large)
                                             ->color(Color::Amber),
                                         TextEntry::make('overall_satisfaction')
                                             ->label('Satisfaction')
-                                            ->badge()
+                                            // ->badge()
+                                            ->size(TextSize::Large)
                                             ->color(Color::Emerald),
                                         TextEntry::make('pss_score')
                                             ->label('Customer Score')
-                                            ->badge()
+                                            // ->badge()
+                                            ->size(TextSize::Large)
                                             ->color(Color::Emerald),
                                     ])
                                     ->columnSpanFull(),
