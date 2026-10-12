@@ -89,6 +89,13 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
       return;
     }
 
+    await chrome.storage.local.remove([
+      'id',
+      'executiveSummary',
+      'originalSender',
+      'action',
+    ])
+
     await chrome.tabs.update(originalSender.tab?.id, {
       active: true
     })
