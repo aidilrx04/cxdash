@@ -61,6 +61,7 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
 
   if (message.action === ACTIONS.PAPS_START) {
     await chrome.storage.local.set({
+      id: message.id,
       originalSender: sender,
       action: message.action,
       executiveSummary: message.executiveSummary
@@ -70,6 +71,9 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     await chrome.tabs.create({
       url: PAPS_LINK
     })
+
+    sendResponse({ status: 'Started' })
+    return true;
   }
 
   if (message.action === ACTIONS.PAPS_COMPLETE) {

@@ -48,7 +48,9 @@ function main() {
     setBindingRef: (val) => { state.isBindingReport = val; },
     onBind: (btn) => {
       btn.addEventListener('click', () => {
+        const actionId = crypto.randomUUID();
         chrome.runtime.sendMessage(EXT_ID, {
+          id: actionId,
           action: ACTIONS.PAPS_START,
           executiveSummary: btn.dataset.executiveSummary,
         });
