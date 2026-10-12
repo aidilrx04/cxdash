@@ -14,6 +14,7 @@ use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Text;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Storage;
 
 class TrainingReportForm
@@ -66,17 +67,9 @@ class TrainingReportForm
                                 ]),
                         ])
                         ->headerActions([
-                            Action::make('Generate Report')
-                                ->label('Generate Report')
-                                ->extraAttributes(function ($record) {
-                                    return [
-                                        'data-generate-report' => true,
-                                        'data-executive-summary' => e($record->executive_summary),
-                                        'data-id' => $record->id,
-                                        'id' => 'cx-generate-report'
-                                    ];
-                                }),
                             Action::make('auto_summarizer')
+                                ->label('Generate')
+                                ->icon(Heroicon::Sparkles)
                                 ->extraAttributes(function ($record) {
                                     // Safe check for file path
                                     $filePath = $record->file_path ? Storage::url($record->file_path) : null;
