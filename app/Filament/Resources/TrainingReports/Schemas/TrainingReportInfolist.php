@@ -29,6 +29,8 @@ class TrainingReportInfolist
                             ->label('Client'),
                         TextEntry::make('trainer_name')
                             ->label('Trainer'),
+                        TextEntry::make('status')
+                            ->columnSpanFull(),
                         Section::make('')->columnSpanFull(),
                         Grid::make(4)
                             ->schema([
@@ -50,7 +52,6 @@ class TrainingReportInfolist
                                     ->color(Color::Emerald),
                             ])
                             ->columnSpanFull(),
-                        TextEntry::make('status')
                     ]),
                 Section::make('Information')
                     ->columns(1)
