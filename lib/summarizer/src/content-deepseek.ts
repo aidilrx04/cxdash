@@ -96,6 +96,13 @@ const UIBuilder = {
  * Main Workflow Execution
  */
 (async function initWorkflow() {
+  const store = await chrome.storage.local.get('id')
+
+  if (!store.id) {
+    console.log('[DEEPSEEK] Summarizer is not running.')
+    return;
+  }
+
   try {
     // 1. Fetch data from chrome storage
     const { feedback1 = '', feedback2 = '' } = await chrome.storage.local.get([
