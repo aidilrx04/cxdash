@@ -62,8 +62,9 @@ class TrainingReportForm
                         ->hiddenOn('create')
                         ->schema([
                             RichEditor::make('executive_summary')
+                                ->hiddenLabel()
                                 ->toolbarButtons([
-                                    ['bold', 'italic', 'underline', 'strike', 'alignStart', 'alignCenter', 'alignEnd']
+                                    ['bold', 'italic', 'underline', 'strike', 'alignStart', 'alignCenter', 'alignEnd', 'alignJustify']
                                 ]),
                         ])
                         ->headerActions([
