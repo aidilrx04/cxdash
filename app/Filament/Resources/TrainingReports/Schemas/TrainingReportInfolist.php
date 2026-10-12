@@ -65,6 +65,7 @@ class TrainingReportInfolist
                                     ->columnSpanFull(),
                             ]),
                         Section::make('Executive Summary')
+                            ->collapsible()
                             ->schema([
                                 TextEntry::make('executive_summary')
                                     ->hiddenLabel()
