@@ -30,7 +30,7 @@ EVALUATION_HEADERS = [
 
 tables = []
 
-def get_participants(tables: list):
+def get_participants(tables: list) -> list:
     participants = []
     for table in tables:
         if table[0][0] != 'No' and table[0][1] != 'Trainee\'s Name':
@@ -71,7 +71,9 @@ def header_is_same(header1:list,header2:list)->bool:
 
     return True
 
-def sanitize_tables(tables:list)->list:
+def normalize_tables(tables:list)->list:
+    """Fix tables that splitted into multipage by comparing if it has the same headers."""
+
     new_tables = []
     prev_header = []
     for table in tables:
@@ -104,9 +106,10 @@ def get_evaluation_feedbacks(tables:list):
 def normalize_multiline(input:str)->str:
     return input.replace('\n',' ')
 
-def parse_pdf(file_path):
+def parse_pdf(file_path: str) -> dict:
+    """Parse pdf and return extracted information"""
+    
     information = {}
-
     
     if not os.path.exists(file_path):
         raise FileNotFoundError(f"File not found: {file_path}")
@@ -124,9 +127,8 @@ def parse_pdf(file_path):
                 for table in extracted_tables:
                     tables.append(table)
 
-    tables = sanitize_tables(tables)
-    # print(tables)
-    # return
+    tables = normalize_tables(tables)
+
     participants = get_participants(tables)
     # print(tables)
     general_feedbacks = get_general_feedbacks(tables)
@@ -148,6 +150,8 @@ def parse_pdf(file_path):
     return information
 
 def main():
+    """Parse given pdf and output the result"""
+
     default_file = os.path.join(os.path.dirname(__file__), 'sample.pdf')
     default_output = os.path.join(os.path.dirname(__file__), 'result.json')
 
