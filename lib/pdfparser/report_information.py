@@ -30,7 +30,7 @@ EVALUATION_HEADERS = [
 
 tables = []
 
-def get_participants(tables: list) -> list:
+def get_participants(tables: list[list[list[str]]]) -> list[str]:
     participants = []
     for table in tables:
         if table[0][0] != 'No' and table[0][1] != 'Trainee\'s Name':
@@ -40,7 +40,7 @@ def get_participants(tables: list) -> list:
             participants.append(normalize_multiline(participant[1]))
     return participants
 
-def get_general_feedbacks(tables: list):
+def get_general_feedbacks(tables: list) -> dict[str, dict[str, str]]:
     feedbacks = {}
 
     for table in tables:
@@ -59,7 +59,6 @@ def get_general_feedbacks(tables: list):
     return feedbacks
 
 def header_is_same(header1:list,header2:list)->bool:
-    # print(header1,header2)
     if len(header1) != len(header2):
         return False
     for i in range(len(header1)):
@@ -79,7 +78,6 @@ def normalize_tables(tables:list)->list:
     for table in tables:
         if header_is_same(table[0],prev_header):
             # todo: can find actual content here by comparing potential multi header rows against each other
-            # print('table is prv', table[0])
             table = table[1:]
             new_tables[len(new_tables)-1] += table
         else:
@@ -87,7 +85,7 @@ def normalize_tables(tables:list)->list:
             new_tables.append(table)
     return new_tables
 
-def get_evaluation_feedbacks(tables:list):
+def get_evaluation_feedbacks(tables:list) -> dict[str, dict[str, list[int]]]:
     feedbacks = {}
     for table in tables:
         for header in EVALUATION_HEADERS:
