@@ -16,6 +16,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class TrainingReportsTable
 {
@@ -42,11 +43,14 @@ class TrainingReportsTable
                     ->icon('heroicon-m-user-circle'),
 
                 TextColumn::make('total_participants')
-                    ->label('Participants')
+                    ->label('Participants (Evaluated)')
                     ->sortable()
                     ->numeric()
-                    ->alignCenter()
-                    ->description(fn(TrainingReport $record): string => "{$record->total_evaluation} evaluated"),
+                    ->alignRight()
+                    ->extraAttributes(['style' => 'font-variant-numeric: tabular-nums'])
+                    ->state(fn($record) => $record->total_participants . " (" . $record->total_evaluation . ")")
+                // ->description(fn(TrainingReport $record): string => "{$record->total_evaluation} evaluated")
+                ,
 
                 TextColumn::make('overall_satisfaction')
                     ->label('Satisfaction')
@@ -62,7 +66,8 @@ class TrainingReportsTable
                             default => 'gray',
                         };
                     })
-                    ->alignCenter(),
+
+                    ->alignRight(),
 
                 TextColumn::make('pss_score')
                     ->label('PSS Score')
@@ -70,9 +75,10 @@ class TrainingReportsTable
                     ->badge()
                     ->color('info')
                     ->placeholder('N/A')
-                    ->alignCenter()
+                    ->alignRight()
                     ->toggleable()
-                    ->numeric(2),
+                    ->numeric(2)
+                    ->extraAttributes(['style' => 'font-variant-numeric: tabular-nums']),
 
                 TextColumn::make('status')
                     ->label('Status')
@@ -85,7 +91,7 @@ class TrainingReportsTable
                         'rejected', 'cancelled' => 'danger',
                         default => 'gray',
                     })
-                    ->alignCenter(),
+                    ->alignLeft(),
 
                 TextColumn::make('file_path')
                     ->label('Report File')
