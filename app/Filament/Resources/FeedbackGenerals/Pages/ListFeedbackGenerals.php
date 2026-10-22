@@ -12,13 +12,13 @@ class ListFeedbackGenerals extends ListRecords
 {
     protected static string $resource = FeedbackGeneralResource::class;
 
-    #[Override]
-    public function getHeaderWidgets(): array
-    {
-        return [
-            FeedbackGeneralStatsOverview::class
-        ];
-    }
+    // #[Override]
+    // public function getHeaderWidgets(): array
+    // {
+    //     return [
+    //         FeedbackGeneralStatsOverview::class
+    //     ];
+    // }
 
     protected function getHeaderActions(): array
     {

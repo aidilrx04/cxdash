@@ -12,13 +12,13 @@ class ListClients extends ListRecords
 {
     protected static string $resource = ClientResource::class;
 
-    #[Override]
-    public function getHeaderWidgets(): array
-    {
-        return [
-            ClientStatsOverview::class
-        ];
-    }
+    // #[Override]
+    // public function getHeaderWidgets(): array
+    // {
+    //     return [
+    //         ClientStatsOverview::class
+    //     ];
+    // }
 
     protected function getHeaderActions(): array
     {

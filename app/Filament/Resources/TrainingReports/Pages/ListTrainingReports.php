@@ -19,11 +19,11 @@ class ListTrainingReports extends ListRecords
         ];
     }
 
-    #[Override]
-    public function getHeaderWidgets(): array
-    {
-        return [
-            TrainingReportStats::class
-        ];
-    }
+    // #[Override]
+    // public function getHeaderWidgets(): array
+    // {
+    //     return [
+    //         TrainingReportStats::class
+    //     ];
+    // }
 }
